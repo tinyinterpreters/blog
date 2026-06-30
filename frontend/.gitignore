@@ -1,8 +1,0 @@
-.astro/
-dist/
-node_modules/
-public/pagefind
-
-.pnpm-store
-pnpm-debug.log*
-
