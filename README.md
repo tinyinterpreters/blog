@@ -2,6 +2,19 @@
 
 The Tiny Interpreters blog.
 
+## Usage
+
+```bash
+nix develop
+
+d # Start the development server
+b # Build the website and write it to disk
+p # Preview the build locally
+c # Remove development and build artifacts
+
+deploy-prod # Deploy the website
+```
+
 ## Tech Stack
 
 - [AstroPaper](https://astro-paper.pages.dev/) [v6.1.0](https://github.com/satnaing/astro-paper/releases/tag/v6.1.0)
