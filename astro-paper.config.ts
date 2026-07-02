@@ -29,7 +29,7 @@ export default defineAstroPaperConfig({
     search: "pagefind",
   },
   socials: [
-    { name: "github",   url: "https://github.com/dwayne" },
+    { name: "github",   url: "https://github.com/tinyinterpreters" },
     // { name: "x",        url: "https://x.com/username" },
     // { name: "linkedin", url: "https://www.linkedin.com/in/username/" },
     { name: "mail",     url: "mailto:dwayne@tinyinterpreters.dev" },
