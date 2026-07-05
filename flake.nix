@@ -39,7 +39,7 @@
             }
 
             clean () {
-              rm -rf "$PROJECT_ROOT/"{.astro,dist,node_modules}
+              rm -rf "$PROJECT_ROOT/"{.astro,dist,node_modules,public/pagefind}
             }
             alias c='clean'
 
