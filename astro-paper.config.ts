@@ -4,7 +4,7 @@ export default defineAstroPaperConfig({
   site: {
     url: "https://blog.tinyinterpreters.dev/",
     title: "Tiny Interpreters",
-    description: "Hand-crafted, miniature interpreters with Elm.",
+    description: "Learn how programming languages work, one tiny interpreter at a time.",
     author: "Dwayne Crooks",
     profile: "https://elmwithdwayne.dev/",
     ogImage: "default-og.png",
