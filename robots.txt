@@ -1,0 +1,5 @@
+
+User-agent: *
+Allow: /
+
+Sitemap: https://blog.tinyinterpreters.dev/sitemap-index.xml
