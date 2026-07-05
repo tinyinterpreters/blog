@@ -7,7 +7,7 @@ export default defineAstroPaperConfig({
     description: "Hand-crafted, miniature interpreters with Elm.",
     author: "Dwayne Crooks",
     profile: "https://elmwithdwayne.dev/",
-    ogImage: "default-og.jpg",
+    ogImage: "default-og.png",
     lang: "en",
     timezone: "America/Port_of_Spain",
     dir: "ltr",
