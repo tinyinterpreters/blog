@@ -1,20 +1,48 @@
 ---
 title: "About"
-description: "A bit about me and this blog."
+description: "Why Tiny Interpreters exists and how it teaches programming language design and implementation one tiny interpreter at a time."
 ---
 
-Ever since I taught myself how to program I've been fascinated by programming languages. I was always curious about how they worked.
+Hi, I’m Dwayne. 👋 Welcome to Tiny Interpreters, where you'll learn how programming languages work, one tiny interpreter at a time.
 
-My first attempt to learn about programming languages led me down a path that started with [The Dragon Book](https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools "Compilers: Principles, Techniques, and Tools"). Unfortunately, I wasn't as worthy a knight to defeat the dragon. To make matters worse, the book left me with the impression that the syntax of a programming language was one of its most fundamental parts. Surprise, surprise, it's not.
+We start with the smallest complete interpreter we can build and gradually extend it with carefully chosen language features.
 
-Years went by before I was able to recover from my dragon inflicted wounds and attempt to learn about programming languages once again. This time I came to it through my hobbyist explorations in programming language theory. I was skimming the [Getting Started](http://lambda-the-ultimate.org/node/492 "A thread for advice on where to begin aimed at those who haven't studied PL theory") thread from [Lambda the Ultimate](http://lambda-the-ultimate.org/ "The Programming Languages Weblog") and I came across [a comment from Paul Snively](http://lambda-the-ultimate.org/node/492#comment-3760 "PL Design Launching-Off Points") that recommended [EOPL](https://www.eopl3.com/ "The Essentials of Programming Languages"), [LiSP](https://christian.queinnec.org/WWW/LiSP.html "Lisp in Small Pieces"), [TAPL](https://www.cis.upenn.edu/~bcpierce/tapl/ "Types and Programming Languages"), and [CTM](https://ctm.info.ucl.ac.be/ "Concepts, Techniques, and Models of Computer Programming") as great starting points to learn about programming language design. I decided to take his advice seriously and started reading **The Essentials of Programming Languages (3rd Edition)** in earnest.
+Each new feature brings us back to a recurring set of questions:
 
-EOPL was a better starting point for me. It contained such a wealth of knowledge for the budding language designer and implementer that I was surprised it wasn't a more popular recommendation. Maybe it's because it starts slowly, seems a little abstract at the beginning and uses Scheme? Who knows! But once you get to the third chapter, it's interpreters all the way down and it's so much fun. I get giddy just thinking about it. Here's a sample of the concepts it teaches: inductive data specification, recursive programming, data abstraction, defunctionalization, concrete and abstract syntax, first-class procedures, currying, deBruijn indices, environments, stores, call-by-reference, call-by-name, call-by-need, continuation-passing style, trampolining, exception handling, multithreading, type checking, and type inference.
+- What should the feature mean?
+- How should we represent it?
+- How should we parse it?
+- How should we evaluate it?
+- How should we test it?
 
-EOPL is deep, so much so, that I haven't been able to finish it nor have I been able to start working through the other three books. Still, it has single-handedly enhanced my understanding of programming, transformed how I think about software development, and improved how I write programs. Those reasons are why I started this blog. I feel compelled to share what I've been discovering about programming language design and implementation via EOPL and other related resources. My journey into this intriguing field has only now begun but I invite you to join me on this dragonless path where we are free to roam and explore the thought-provoking idea landscape that is hidden behind the abstract mathematics and esoteric academic language that commonly shrouds the field.
+By following each feature through every part of the interpreter, we can understand how the feature works and how a small language change affects the interpreter as a whole.
 
-In this blog, I will follow the excellent example set by EOPL, and use small/mini/**tiny interpreters** to implement various programming language features so that we can appreciate how they work. Our aim will be to explore and understand the concepts to be able to transfer and use them in other areas of software development besides the construction of programming languages. To achieve this goal, we will be using [Elm](https://elm-lang.org/ "The Elm Programming Language - A delightful language for building reliable interpreters") as our implementation language.
+Tiny Interpreters is the path into programming languages I wish I could have followed when I first tried to learn the subject. It took me years—and one unsuccessful encounter with a dragon—to find that path for myself.
 
-Why Elm? Because it's a small purely functional programming language that is easy to learn and use. It has excellent support for [modular programming](https://guide.elm-lang.org/webapps/modules "The Elm Guide on Modules"), [custom types](https://guide.elm-lang.org/types/custom_types "The Elm Guide on Custom Types"), and [pattern matching](https://guide.elm-lang.org/types/pattern_matching "The Elm Guide on Pattern Matching"). Features which turn out to be ideal for building interpreters. Elm quickly gets out of the way so we can focus on the ideas we're ultimately trying to master.
+## My first encounter with the dragon
 
-Thank you for your interest in this blog and I hope you find it useful.
+I became interested in programming languages when I discovered that studying, designing, and building them brought together several fields I enjoyed: mathematics, computer science, and software development.
+
+My university didn't offer a course in programming languages or compiler construction while I was there, so I had to explore the subject on my own.
+
+I started with [Compilers: Principles, Techniques, and Tools](https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools), better known as the Dragon Book, but I didn't get very far. I learned a great deal about parsing and syntax-directed translation, but I still lacked a clear framework for understanding how programming language features were designed, implemented, and made to work together.
+
+It would be a few more years before my dragon-inflicted wounds healed and I found a path into the subject that worked for me.
+
+## Finding another way in
+
+In the [Getting Started](http://lambda-the-ultimate.org/node/492) thread on Lambda the Ultimate, [Paul Snively](http://lambda-the-ultimate.org/node/492#comment-3760) recommended four books he considered especially good starting points for learning programming language design. One of them was EOPL—[_Essentials of Programming Languages_](https://www.eopl3.com/)—which he suggested beginning with, so I started there.
+
+EOPL was also challenging. I had to work through two introductory chapters and an appendix before reaching the material I had come for: the sequence of interpreters that begins in Chapter 3. Once I got there, however, the challenge felt purposeful rather than obstructive. The book gave me one meaningful problem to work through at a time.
+
+EOPL led me through a sequence of small languages, each implemented with an interpreter and extending the one before it. With each new feature, I could follow the change from the language’s concrete syntax, through its parser and abstract syntax, to the evaluator that gave it meaning—all without losing sight of how the whole interpreter worked.
+
+For the first time, programming language design and implementation felt like a process I could follow. I didn't have to understand an entire compiler before I could build something meaningful. I could begin with a small language, make one focused change, and understand why every resulting change to the interpreter was necessary.
+
+## Why Elm?
+
+We’re starting with Elm because it makes the structures inside an interpreter explicit without adding much unrelated complexity. Custom types let us model syntax, values, errors, and other parts of the language directly, while pattern matching makes it natural to write functions that follow those structures. Elm is small, pure, and call-by-value, and its [`elm/parser`](https://package.elm-lang.org/packages/elm/parser/latest/) library gives us the tools to build complete parsers for the languages we design. Together, these qualities help us keep our attention on the ideas we're trying to understand.
+
+## The bigger picture
+
+As you learn to build interpreters, you’ll also develop skills that apply to software design more broadly. You’ll learn to model ideas with precise data structures, design APIs that express what users can do, test implementations against their intended meaning, and trace how one decision affects an entire system. These are skills you can carry into parsers, libraries, web applications, and other kinds of software.
