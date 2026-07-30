@@ -23,8 +23,8 @@ export default defineAstroPaperConfig({
     showArchives: true,
     showBackButton: true,
     editPost: {
-      enabled: true,
-      url: "https://github.com/tinyinterpreters/blog/edit/master/",
+      enabled: false,
+      // url: "https://github.com/tinyinterpreters/blog/edit/master/",
     },
     search: "pagefind",
   },
