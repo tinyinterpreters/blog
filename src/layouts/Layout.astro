@@ -96,7 +96,12 @@ const rssHref = getRelativeLocaleUrl(
     }
 
     <!-- Umami -->
-    <script is:inline src="https://cloud.umami.is/script.js" data-website-id="ed3db768-5d52-4329-ad57-e651c8aa02dc"></script>
+    <script
+      is:inline
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="ed3db768-5d52-4329-ad57-e651c8aa02dc">
+    </script>
 
     <!--
       Inline FOUC-prevention script: sets data-theme on <html> before
