@@ -46,3 +46,11 @@ We’re starting with Elm because it makes the structures inside an interpreter 
 ## The bigger picture
 
 As you learn to build interpreters, you’ll also develop skills that apply to software design more broadly. You’ll learn to model ideas with precise data structures, design APIs that express what users can do, test implementations against their intended meaning, and trace how one decision affects an entire system. These are skills you can carry into parsers, libraries, web applications, and other kinds of software.
+
+## Where to begin
+
+Start with [CONST: The Structure of a Tiny Interpreter in Elm](https://blog.tinyinterpreters.dev/posts/const).
+
+In CONST, we build the tiniest complete interpreter in the series. Its programs contain only non-negative integer literals, which keeps the language simple enough for us to follow the complete path from source text to an AST and finally to an evaluated value.
+
+That structure becomes the foundation for everything that follows.
