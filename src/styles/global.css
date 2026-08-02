@@ -36,3 +36,83 @@
 :target {
   scroll-margin-block: 1rem;
 }
+
+/* Mermaid
+ *
+ * Source: node_modules/.pnpm/astro-mermaid@2.1.0/node_modules/astro-mermaid/astro-mermaid-integration.js?L619-697
+ */
+
+/* Prevent layout shifts by setting minimum height */
+pre.mermaid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: transparent;
+  border: none;
+  overflow: auto;
+  min-height: 200px; /* Prevent layout shift */
+  position: relative;
+}
+
+/* Loading state with skeleton loader */
+pre.mermaid:not([data-processed]) {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Dark mode skeleton loader */
+[data-theme="dark"] pre.mermaid:not([data-processed]) {
+  background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Show processed diagrams with smooth transition */
+pre.mermaid[data-processed] {
+  animation: none;
+  background: transparent;
+  min-height: auto; /* Allow natural height after render */
+}
+
+/* Ensure responsive sizing for mermaid SVGs */
+pre.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Optional: Add subtle background for better visibility */
+@media (prefers-color-scheme: dark) {
+  pre.mermaid[data-processed] {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 0.5rem;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  pre.mermaid[data-processed] {
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 0.5rem;
+  }
+}
+
+/* Respect user's color scheme preference */
+[data-theme="dark"] pre.mermaid[data-processed] {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-radius: 0.5rem;
+}
+
+[data-theme="light"] pre.mermaid[data-processed] {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 0.5rem;
+}
