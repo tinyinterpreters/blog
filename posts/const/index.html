@@ -1,0 +1,914 @@
+<!DOCTYPE html><html dir="ltr" lang="en" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><link rel="canonical" href="https://blog.tinyinterpreters.dev/posts/const/"><meta name="generator" content="Astro v6.4.2"><!-- Font --><style>@font-face{font-family:"Google Sans Code-1a30c214885cb404";src:url("/_astro/fonts/02154cca78ac33f2.woff") format("woff"), url("/_astro/fonts/478e42e4694872ef.ttf") format("truetype");font-display:swap;font-weight:300;font-style:italic;}@font-face{font-family:"Google Sans Code-1a30c214885cb404";src:url("/_astro/fonts/3a32a7a7a67f4f58.woff") format("woff"), url("/_astro/fonts/0863f4f6964aa89c.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:"Google Sans Code-1a30c214885cb404";src:url("/_astro/fonts/a5c5808c25effec9.woff") format("woff"), url("/_astro/fonts/792eded6cb3f0350.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:"Google Sans Code-1a30c214885cb404";src:url("/_astro/fonts/14314705006234cb.woff") format("woff"), url("/_astro/fonts/87d8fc1072d4917b.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:"Google Sans Code-1a30c214885cb404";src:url("/_astro/fonts/c33265ba093eb291.woff") format("woff"), url("/_astro/fonts/ec883ed4db81a7d9.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:"Google Sans Code-1a30c214885cb404";src:url("/_astro/fonts/c26ad40d3b1d9169.woff") format("woff"), url("/_astro/fonts/7a5ee0cfcde31b81.ttf") format("truetype");font-display:swap;font-weight:300;font-style:normal;}@font-face{font-family:"Google Sans Code-1a30c214885cb404";src:url("/_astro/fonts/87ca066ba5b2c7cf.woff") format("woff"), url("/_astro/fonts/f4e25dfe9d6152ec.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:"Google Sans Code-1a30c214885cb404";src:url("/_astro/fonts/a9a0e80c053be3d5.woff") format("woff"), url("/_astro/fonts/a9df48ecd03749e4.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:"Google Sans Code-1a30c214885cb404";src:url("/_astro/fonts/da468df88542c99b.woff") format("woff"), url("/_astro/fonts/90f9809471092714.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:"Google Sans Code-1a30c214885cb404";src:url("/_astro/fonts/f914de358bc554f6.woff") format("woff"), url("/_astro/fonts/dbc9996f99c63e07.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Google Sans Code-1a30c214885cb404 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:300;font-style:italic;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-1a30c214885cb404 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:400;font-style:italic;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-1a30c214885cb404 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:500;font-style:italic;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-1a30c214885cb404 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:600;font-style:italic;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-1a30c214885cb404 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:700;font-style:italic;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-1a30c214885cb404 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:300;font-style:normal;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-1a30c214885cb404 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:400;font-style:normal;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-1a30c214885cb404 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:500;font-style:normal;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-1a30c214885cb404 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:600;font-style:normal;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-1a30c214885cb404 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:700;font-style:normal;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}:root{--font-google-sans-code:"Google Sans Code-1a30c214885cb404","Google Sans Code-1a30c214885cb404 fallback: Courier New",monospace;}</style><!-- Primary meta --><title>CONST: The Structure of a Tiny Interpreter in Elm | Tiny Interpreters</title><meta name="title" content="CONST: The Structure of a Tiny Interpreter in Elm | Tiny Interpreters"><meta name="description" content="Build a tiny but complete interpreter in Elm and follow a program from source text through parsing and an AST to its evaluated result."><meta name="author" content="Dwayne Crooks"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Tiny Interpreters"><meta property="og:title" content="CONST: The Structure of a Tiny Interpreter in Elm | Tiny Interpreters"><meta property="og:description" content="Build a tiny but complete interpreter in Elm and follow a program from source text through parsing and an AST to its evaluated result."><meta property="og:url" content="https://blog.tinyinterpreters.dev/posts/const/"><meta property="og:image" content="https://blog.tinyinterpreters.dev/posts/const/index.png"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://blog.tinyinterpreters.dev/posts/const/"><meta property="twitter:title" content="CONST: The Structure of a Tiny Interpreter in Elm | Tiny Interpreters"><meta property="twitter:description" content="Build a tiny but complete interpreter in Elm and follow a program from source text through parsing and an AST to its evaluated result."><meta property="twitter:image" content="https://blog.tinyinterpreters.dev/posts/const/index.png"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Tiny Interpreters" href="https://blog.tinyinterpreters.dev/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2026-08-03T05:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"CONST: The Structure of a Tiny Interpreter in Elm | Tiny Interpreters","image":"https://blog.tinyinterpreters.dev/posts/const/index.png","datePublished":"2026-08-03T05:00:00.000Z","author":[{"@type":"Person","name":"Dwayne Crooks","url":"https://elmwithdwayne.dev/"}]}</script> <!-- Umami --><script defer src="https://cloud.umami.is/script.js" data-website-id="ed3db768-5d52-4329-ad57-e651c8aa02dc">
+    </script><!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        const root = document.firstElementChild;
+        root?.setAttribute("data-theme", theme);
+        root?.classList.toggle("dark", theme === "dark");
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.CEgXhNkY.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><script type="module" src="/_astro/page.B6hxmjfE.js"></script><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: interpreters; }@layer astro { ::view-transition-old(interpreters) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(interpreters) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(interpreters) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(interpreters) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-2"] { view-transition-name: programming-languages; }@layer astro { ::view-transition-old(programming-languages) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(programming-languages) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(programming-languages) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(programming-languages) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-3"] { view-transition-name: elm; }@layer astro { ::view-transition-old(elm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(elm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(elm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(elm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> Skip to content </a> <header class="app-layout flex flex-col items-center justify-between sm:flex-row"> <div class="border-border bg-background relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6"> <a href="/" class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"> Tiny Interpreters </a> <nav id="nav-menu" class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"> <button id="menu-btn" class="focus-outline self-end p-2 sm:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="menu-items" data-label-open="Open menu" data-label-close="Close menu"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> <ul id="menu-items" class="[&>li>a]:hover:text-accent mt-4 hidden w-44 grid-cols-2 place-content-center gap-2 sm:mt-0 sm:flex sm:w-auto sm:gap-x-5 sm:gap-y-0 sm:[&>li]:h-8 [&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium sm:[&>li>a]:px-2 sm:[&>li>a]:py-1"> <li class="col-span-2"> <a href="/posts/" class="active-nav"> Posts </a> </li> <li class="col-span-2"> <a href="/tags/"> Tags </a> </li> <li class="col-span-2"> <a href="/about/"> About </a> </li> <li class="col-span-2"> <a href="/archives/" title="Archives" aria-label="Archives" class="group inline-flex items-center gap-1 hover:text-accent focus-outline flex size-full justify-center p-3 sm:relative sm:size-8 sm:p-0">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden sm:absolute sm:top-1/2 sm:left-1/2 sm:block sm:size-6 sm:-translate-x-1/2 sm:-translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8M10 12h4" /></svg> <span class="sm:sr-only">Archives</span>  </a> </li> <li class="col-span-1 flex items-center justify-center"> <a href="/search/" title="Search" aria-label="Search" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-8">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> <span class="sr-only">Search</span>  </a> </li> <li class="col-span-1 flex items-center justify-center"> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-12 p-4 sm:size-8" title="Toggle theme" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> </li> </ul> </nav> </div> </header> <script type="module">function c(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),s=document.querySelector("#close-icon");if(!e||!t||!n||!s)return;const a=e.dataset.labelOpen??"Open menu",l=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const o=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",o?"false":"true"),e.setAttribute("aria-label",o?a:l),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),s.classList.toggle("hidden")})}c();document.addEventListener("astro:after-swap",c);</script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>Go back</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body> <h1 style="view-transition-name:const-the-structure-of-a-tiny-interpreter-in-elm" class="text-accent inline-block text-2xl font-bold sm:text-3xl"> CONST: The Structure of a Tiny Interpreter in Elm </h1> <div class="my-2 flex items-center gap-2"> <div class="text-muted-foreground flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg>  <time class="text-sm sm:text-base" datetime="2026-08-03T05:00:00.000Z"> 3 Aug, 2026 </time> </div> <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">
+|
+</span>  </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"> <h2 id="welcome-to-tiny-interpreters">Welcome to Tiny Interpreters</h2>
+<p>In Tiny Interpreters, we’re going to learn how programming languages work by building tiny interpreters. We’ll kick things off in Elm. Each post will focus on one small language feature or idea at a time, so we can understand it clearly before moving on.</p>
+<p>Our first interpreter is called CONST.</p>
+<p>A complete CONST program is just a non-negative integer literal:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>123</span></span></code></pre>
+<h2 id="table-of-contents">Table of contents</h2>
+<p></p><details><summary>Open Table of contents</summary><p></p>
+<ul>
+<li><a href="#why-const">Why CONST?</a></li>
+<li><a href="#the-interpreter-pipeline">The interpreter pipeline</a></li>
+<li><a href="#the-project-structure">The project structure</a></li>
+<li><a href="#the-grammar">The grammar</a></li>
+<li><a href="#the-lexer">The lexer</a></li>
+<li><a href="#the-ast">The AST</a></li>
+<li><a href="#the-parser">The parser</a></li>
+<li><a href="#the-interpreter">The interpreter</a></li>
+<li><a href="#tests-as-executable-examples">Tests as executable examples</a></li>
+<li><a href="#what-we-learned">What we learned</a></li>
+<li><a href="#where-we-go-next">Where we go next</a></li>
+</ul>
+<p></p></details><p></p>
+<h2 id="why-const">Why CONST?</h2>
+<p>Evaluating an integer literal isn’t especially interesting by itself. What makes CONST useful is that it lets us see the complete structure of an interpreter without other language features getting in the way.</p>
+<p>There are no arithmetic expressions, Boolean expressions, conditionals, variables, let bindings, or functions to think about yet. That’s intentional. Each of those ideas deserves attention, and we’ll get to them later. For now, I want the structure needed to take a program from source text to a value to be as clear as possible.</p>
+<p>Even though CONST is tiny, it still gives us the major pieces of an interpreter:</p>
+<ul>
+<li>a grammar that describes valid programs</li>
+<li>a lexer that recognizes non-negative integer literals</li>
+<li>an abstract syntax tree (AST) that represents the program in Elm</li>
+<li>a parser that turns source text into an AST</li>
+<li>evaluation logic that turns the AST into a value</li>
+<li>tests that describe the behaviour of the language</li>
+</ul>
+<p>Once those pieces are in place, future interpreters can preserve the same basic shape as the language grows. Each new language feature will lead us to ask:</p>
+<ul>
+<li>How does the grammar change?</li>
+<li>How does the lexer change?</li>
+<li>How does the AST change?</li>
+<li>How does the parser change?</li>
+<li>How does evaluation change?</li>
+<li>What tests describe and protect the new behaviour?</li>
+</ul>
+<p>That’s why we start with CONST: it’s small enough to understand all at once, while still giving us the foundation for everything that follows.</p>
+<p>You can find the <a href="https://github.com/tinyinterpreters/const">complete source code for CONST on GitHub</a>.</p>
+<h2 id="the-interpreter-pipeline">The interpreter pipeline</h2>
+<p>Before we look at the individual modules, it helps to see the overall pipeline.</p>
+<p>A CONST program starts as source text:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>123</span></span></code></pre>
+<p>If the source text is valid, the parser turns it into an AST:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Program (Const </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span></code></pre>
+<p>Then the AST is evaluated to produce a value:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">VNumber </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span></span></code></pre>
+<p>So the structure looks like this:</p>
+<pre class="mermaid">flowchart TD
+    A["source text"] -->|parse| B["AST"]
+    B -->|evaluate| C["value"]</pre>
+<p>For CONST, this may seem like a lot of structure just to evaluate an integer literal. But as the language grows, the same path from source text to AST to value will remain familiar.</p>
+<h2 id="the-project-structure">The project structure</h2>
+<p>Before we examine the implementation, let’s see how the code is organized.</p>
+<p>The source code for the CONST interpreter lives under <code>src/CONST</code>:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>src/</span></span>
+<span class="line"><span>└── CONST/</span></span>
+<span class="line"><span>    ├── AST.elm</span></span>
+<span class="line"><span>    ├── Interpreter.elm</span></span>
+<span class="line"><span>    ├── Lexer.elm</span></span>
+<span class="line"><span>    └── Parser.elm</span></span></code></pre>
+<p>Each module has a specific job:</p>
+<ul>
+<li><code>Lexer.elm</code> recognizes the small pieces of syntax we need, such as non-negative integer literals and spaces.</li>
+<li><code>AST.elm</code> defines the Elm types that represent valid CONST programs.</li>
+<li><code>Parser.elm</code> turns source text into an AST.</li>
+<li><code>Interpreter.elm</code> brings parsing and evaluation together behind the public <code>run</code> function.</li>
+</ul>
+<p>The tests mirror the lexer, parser, and interpreter modules:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>tests/</span></span>
+<span class="line"><span>└── Test/</span></span>
+<span class="line"><span>    ├── CONST/</span></span>
+<span class="line"><span>    │   ├── Interpreter.elm</span></span>
+<span class="line"><span>    │   ├── Lexer.elm</span></span>
+<span class="line"><span>    │   └── Parser.elm</span></span>
+<span class="line"><span>    └── Lib.elm</span></span></code></pre>
+<p>There is no separate test module for <code>CONST.AST</code> because it only defines the types used by the rest of the interpreter.</p>
+<p>The extra <code>Test.Lib</code> module contains reusable test helpers shared across the test suite.</p>
+<h2 id="the-grammar">The grammar</h2>
+<p>Let’s start by describing the language.</p>
+<p>CONST has a very small grammar:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>Program ::= Expr</span></span>
+<span class="line"><span>Expr    ::= Const</span></span>
+<span class="line"><span>Const   ::= Number</span></span>
+<span class="line"><span>Number  ::= [0-9]+</span></span></code></pre>
+<p>A <code>Program</code> is an <code>Expr</code>. An <code>Expr</code> is a <code>Const</code>. A <code>Const</code> is a <code>Number</code>. A <code>Number</code> is one or more digits.</p>
+<p>That gives us valid programs like these:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>0</span></span></code></pre>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>123</span></span></code></pre>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>2026</span></span></code></pre>
+<p>And it rules out programs like these:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>abc</span></span></code></pre>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>-(1, 2)</span></span></code></pre>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>let x = 3 in x</span></span></code></pre>
+<p>Those examples are not valid CONST programs because identifiers, difference expressions, and let expressions are not part of the CONST language.</p>
+<p>The grammar tells us what the lexer needs to recognize, what program structure the AST needs to represent, and what source text the parser needs to accept.</p>
+<h2 id="the-lexer">The lexer</h2>
+<p>In this project, the lexer consists of small parsers that recognize the basic pieces of source text used by the language. We use the <a href="https://package.elm-lang.org/packages/elm/parser/latest/"><code>elm/parser</code></a> package to implement both these lexical parsers and the parser for complete programs.</p>
+<p>For CONST, the basic pieces of source text are non-negative integer literals and spaces. In many lexer–parser designs, the parser requests tokens from a separate lexer. Here, the lexical parsers are composed directly into the parser instead.</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">module</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> CONST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">Lexer</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> exposing</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (</span><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">digits</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic"> spaces</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">import</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> Parser</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> as</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> exposing</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> ((|.)</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (|=)</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">digits</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Int</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">digits</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">    chompOneOrMore </span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">Char</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">isDigit</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |></span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">getChompedString</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |></span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">map (</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">Maybe</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">withDefault </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">0</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> &#x3C;&#x3C;</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> String</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">toInt)</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |></span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> lexeme</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">chompOneOrMore</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">Char</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Bool</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">) </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> ()</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">chompOneOrMore</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> isGood </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">=</span></span>
+<span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">    P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">succeed ()</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">chompIf isGood</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">chompWhile isGood</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">lexeme</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#24292EFF;--shiki-dark:#C5E478"> a</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#24292EFF;--shiki-dark:#C5E478"> a</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">lexeme</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> p </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">=</span></span>
+<span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">    P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">succeed identity</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |=</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> p</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> spaces</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">spaces</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> ()</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">spaces</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">    P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">spaces</span></span></code></pre>
+<p>The <code>digits</code> parser does a few things:</p>
+<ol>
+<li>It consumes one or more digits.</li>
+<li>It gets the string that was consumed.</li>
+<li>It converts that string to an <code>Int</code>, falling back to <code>0</code> if the conversion fails.</li>
+<li>It consumes any trailing spaces.</li>
+</ol>
+<p>The <code>chompOneOrMore</code> helper ensures that a number contains at least one digit. <code>P.chompWhile Char.isDigit</code> by itself would also succeed on an empty string, so we first require one digit with <code>P.chompIf</code> and then consume any remaining digits with <code>P.chompWhile</code>.</p>
+<p>The <code>lexeme</code> helper runs a parser and then consumes any spaces that follow it. Applying it to <code>digits</code> lets the number parser accept input like this:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>123</span></span></code></pre>
+<p>and this, where <code>·</code> represents a space:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>123···</span></span></code></pre>
+<p><code>digits</code> doesn’t consume leading spaces. The parser for a complete program handles those, as we’ll see shortly.</p>
+<h2 id="the-ast">The AST</h2>
+<p>We represent complete CONST programs as abstract syntax trees (ASTs) using Elm <a href="https://guide.elm-lang.org/types/custom_types.html">custom types</a>.</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">module</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> CONST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">AST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> exposing</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">    ( Expr(</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">..</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">    ,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Number</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">    ,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Program(</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">..</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">    )</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">type Program</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    =</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Program </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">Expr</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">type Expr</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    =</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Const </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">Number</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">type alias Number</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    Int</span></span></code></pre>
+<p>The AST mirrors the meaningful structure of the grammar. A <code>Program</code> contains an <code>Expr</code>. An <code>Expr</code> can be a constant expression, represented by <code>Const</code>, which contains a <code>Number</code>.</p>
+<p>For now, this may look like too much structure. We could imagine skipping <code>Program</code> and <code>Expr</code> and representing the program as an <code>Int</code>. But that wouldn’t give us a structure we can extend as we add new language features.</p>
+<p>Whitespace gives us a simple example of what the AST leaves behind. Whether the user writes <code>123</code>, <code>123·</code>, or <code>··123</code>, where <code>·</code> represents a space, parsing produces the same AST:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Program (Const </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span></code></pre>
+<h2 id="the-parser">The parser</h2>
+<p>Now that we know which AST the source text should produce, we can look at the parser that constructs it.</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">module</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> CONST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">Parser</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> exposing</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">Error</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic"> parse</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">import</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> CONST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">AST</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> as</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> AST</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> exposing</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (..)</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">import</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> CONST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">Lexer</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> as</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> L</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">import</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> Parser</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> as</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> exposing</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> ((|.)</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (|=)</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">type alias Error</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    List</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.DeadEnd</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">parse</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> String</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Result</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Error</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> AST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.Program</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">parse</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">    P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">run program</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">program</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> AST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.Program</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">program</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">    P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">succeed Program</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> L</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">spaces</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |=</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> expr</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">end</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">expr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Expr</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">expr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">    constExpr</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">constExpr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Expr</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">constExpr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">    P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">map Const number</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">number</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Number</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">number</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">    L</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">digits</span></span></code></pre>
+<p><code>parse</code> runs the <code>program</code> parser on the source text. If parsing succeeds, it returns a <code>Program</code> AST. Otherwise, it returns a parser error.</p>
+<p>The <code>number</code>, <code>constExpr</code>, <code>expr</code>, and <code>program</code> parsers build the AST from the innermost value outward.</p>
+<p><code>L.digits</code> parses source text such as:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>123</span></span></code></pre>
+<p>and produces an <code>Int</code>. Since <code>Number</code> is an alias for <code>Int</code>, the <code>number</code> parser can use <code>L.digits</code> unchanged.</p>
+<p>The <code>constExpr</code> parser uses <code>P.map Const number</code> to wrap that number with the <code>Const</code> constructor. This turns:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>123</span></span></code></pre>
+<p>into:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Const </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span></span></code></pre>
+<p>CONST has no other kinds of expressions, so <code>expr</code> simply uses <code>constExpr</code>.</p>
+<p>The <code>program</code> parser adds the outer <code>Program</code> layer and checks that the entire input forms a valid CONST program.</p>
+<p>It begins with:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">succeed Program</span></span></code></pre>
+<p>The <code>Program</code> constructor has this type:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Program </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Expr </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> AST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Program</span></span></code></pre>
+<p><code>P.succeed</code> doesn’t consume any source text. It creates a parser with this type:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Parser (Expr </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> AST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Program)</span></span></code></pre>
+<p>When run, that parser produces the <code>Program</code> constructor, a function waiting for an <code>Expr</code>.</p>
+<p>Next, the parser consumes any leading spaces:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">|.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> L</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">spaces</span></span></code></pre>
+<p>The <code>|.</code> operator runs <code>L.spaces</code> and discards its <code>()</code> result. It preserves the result of the parser on its left, so the combined parser still has this type:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Parser (Expr </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> AST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Program)</span></span></code></pre>
+<p>When run, it still produces the <code>Program</code> constructor, which is waiting for an <code>Expr</code>.</p>
+<p>Spaces are part of the concrete syntax accepted by the parser, but they carry no information needed in the AST. We therefore use <code>|.</code> to consume them and discard the <code>()</code> value produced by <code>L.spaces</code>.</p>
+<p>The next step parses an expression:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">|=</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> expr</span></span></code></pre>
+<p>The <code>|=</code> operator keeps the <code>Expr</code> produced by <code>expr</code> and applies the waiting <code>Program</code> constructor to it. If <code>expr</code> produces:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Const </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span></span></code></pre>
+<p>the parser now produces:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Program (Const </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span></code></pre>
+<p>Its type has changed from a parser that produces a function to a parser that produces an AST:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Parser </span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">AST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Program</span></span></code></pre>
+<p>Finally:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">|.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">end</span></span></code></pre>
+<p>requires the parser to reach the end of the source text. Its result is discarded because it’s only used to confirm that no input remains.</p>
+<p>Discarding the result of <code>P.end</code> does not change the AST constructed by the parser, so the combined parser still has this type:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Parser </span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">AST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Program</span></span></code></pre>
+<p>Requiring the end of the input ensures that we parse a complete program rather than only a valid prefix. <code>L.digits</code> can recognize the initial number in:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>123abc</span></span></code></pre>
+<p>but the <code>program</code> parser rejects it because <code>abc</code> remains unparsed.</p>
+<h2 id="the-interpreter">The interpreter</h2>
+<p>The <code>CONST.Interpreter</code> module brings parsing and evaluation together. Its <code>run</code> function accepts source text and, if parsing succeeds, evaluates the resulting AST to produce a value.</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">module</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> CONST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">Interpreter</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> exposing</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">Error</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">(..)</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Value</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">(..)</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic"> run</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">import</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> CONST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">AST</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> as</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> AST</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> exposing</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (..)</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">import</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> CONST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">Parser</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> as</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">type Value</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    =</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> VNumber </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">Number</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">type Error</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    =</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> SyntaxError </span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.Error</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">run</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> String</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Result</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Error</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Value</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">run</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> input </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">=</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">    case </span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">parse input </span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">of</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">        Ok program </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">            Ok </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">&#x3C;|</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> runProgram program</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">        Err err </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">            Err </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">&#x3C;|</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> SyntaxError err</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">runProgram</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> AST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.Program</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Value</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">runProgram</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (Program expr) </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">=</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">    runExpr expr</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">runExpr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Expr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Value</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">runExpr</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> expr </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">=</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">    case </span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">expr </span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">of</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">        Const n </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">            VNumber n</span></span></code></pre>
+<p>The <code>Value</code> type represents the possible results of evaluating a CONST program. CONST has only one kind of result: a number, represented in Elm by:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">VNumber Number</span></span></code></pre>
+<p>The <code>Error</code> type represents errors reported by the interpreter. For now, the only possible errors are syntax errors produced while parsing:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">SyntaxError </span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Error</span></span></code></pre>
+<p>The public entry point is <code>run</code>:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">run</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> String</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Result</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Error</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Value</span></span></code></pre>
+<p>It starts by passing the source text to <code>P.parse</code>:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">parse input</span></span></code></pre>
+<p>Parsing produces either a parser error or an AST:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Result </span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Error </span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">AST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Program</span></span></code></pre>
+<p>If parsing fails, <code>run</code> wraps the parser error with <code>SyntaxError</code>:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Err err </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">    Err </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">&#x3C;|</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> SyntaxError err</span></span></code></pre>
+<p>This lets <code>run</code> report the parser error using the interpreter’s own <code>Error</code> type.</p>
+<p>If parsing succeeds, <code>run</code> passes the resulting AST to <code>runProgram</code>:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Ok program </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">    Ok </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">&#x3C;|</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> runProgram program</span></span></code></pre>
+<p><code>runProgram</code> evaluates the AST and produces a <code>Value</code>, which <code>run</code> wraps in <code>Ok</code>.</p>
+<p>Evaluation cannot fail in CONST: every valid CONST AST contains a constant expression whose evaluation always produces a <code>Value</code>. That’s why <code>runProgram</code> and <code>runExpr</code> return <code>Value</code> rather than <code>Result Error Value</code>.</p>
+<p>Evaluation begins with a complete AST such as:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Program (Const </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span></code></pre>
+<p><code>runProgram</code> pattern matches on the <code>Program</code> constructor and extracts its expression:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">runProgram</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (Program expr) </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">=</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">    runExpr expr</span></span></code></pre>
+<p>In this example, <code>runProgram</code> passes <code>Const 123</code> to <code>runExpr</code>. <code>runExpr</code> uses the number stored in the constant expression to construct the result of evaluation:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Const </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span></span></code></pre>
+<p>evaluates to:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">VNumber </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span></span></code></pre>
+<p><code>Const 123</code> is an AST node representing a constant expression in the parsed program. <code>VNumber 123</code> is an interpreter value representing the program’s numeric result, <code>123</code>.</p>
+<p>CONST has only one <code>Expr</code> constructor, so <code>runExpr</code> needs only one branch. Each new kind of expression we add later will require us to define how that expression evaluates.</p>
+<h2 id="tests-as-executable-examples">Tests as executable examples</h2>
+<p>The interpreter tests describe the behaviour of complete CONST programs through the public <code>run</code> function:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">module</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> Test</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">CONST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">Interpreter</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> exposing</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (</span><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">suite</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">import</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> CONST</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">Interpreter</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> as</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> I</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> exposing</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">Value</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">(..))</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">import</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> Test</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> exposing</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">Test</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic"> describe</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">import</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> Test</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">Lib</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> exposing</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> (</span><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">testValue</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">suite</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Test</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">suite</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">    describe </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">CONST.Interpreter</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD">        [</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> describe </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">run</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> &#x3C;|</span></span>
+<span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">            List</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">map (testValue </span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">I</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">run)</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD">                [</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> ( </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">123</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Just (VNumber </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">) )</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">                ,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> ( </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">123 </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Just (VNumber </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">) )</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">                ,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> ( </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">123  </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Just (VNumber </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">) )</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">                ,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> ( </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> 123</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Just (VNumber </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">) )</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">                ,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> ( </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">  123</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Just (VNumber </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">) )</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">                ,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> ( </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">123abc</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Nothing )</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">                ,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> ( </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">onetwothree</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Nothing )</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD">                ]</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD">        ]</span></span></code></pre>
+<p>The <code>testValue</code> helper lets us write each test as source text paired with its expected outcome.</p>
+<p>An expected value wrapped in <code>Just</code> means that the interpreter should succeed with that value:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">( </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">123</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Just (VNumber </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">123</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">) )</span></span></code></pre>
+<p><code>Nothing</code> means that the interpreter should return an error:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">( </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">onetwothree</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Nothing )</span></span></code></pre>
+<p>Together, these examples show that CONST accepts non-negative integer literals with leading or trailing spaces and evaluates them to the expected interpreter value.</p>
+<p>They also show that the entire input must form a valid CONST program. <code>onetwothree</code> contains no valid number, while <code>123abc</code> begins with a valid number but leaves <code>abc</code> unparsed. Both inputs are rejected.</p>
+<p>These tests describe the language from the outside because they pass source text to the public <code>run</code> function and inspect the final outcome. They do not depend on how the lexer, parser, or evaluator is organized internally.</p>
+<p>The <code>testValue</code> helper hides the mechanics of constructing each test while leaving the language examples visible. I’ll cover how that helper works in a separate post about testing Tiny Interpreters.</p>
+<h2 id="what-we-learned">What we learned</h2>
+<p>We now have a tiny but complete interpreter for CONST.</p>
+<p>A source program like this:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>123</span></span></code></pre>
+<p>moves through the interpreter like this:</p>
+<pre class="mermaid">flowchart TD
+    A["123"] -->|parse| B["Program (Const 123)"]
+    B -->|evaluate| C["VNumber 123"]</pre>
+<p>Building that path gave us the basic structure we’ll reuse as the language grows:</p>
+<ul>
+<li>The grammar describes which programs belong to the language.</li>
+<li>Lexical parsers recognize the basic pieces of source text.</li>
+<li>The parser turns valid source text into an AST.</li>
+<li>The AST represents the meaningful structure of the parsed program.</li>
+<li>Evaluation turns the AST into an interpreter value representing the program’s result.</li>
+<li>Tests describe the language’s behaviour through its public interface.</li>
+</ul>
+<p>The complete path from source text to result is now in place. Future interpreters will preserve this structure while adding new kinds of expressions and defining how they are parsed, represented, evaluated, and tested.</p>
+<h2 id="where-we-go-next">Where we go next</h2>
+<p>Next, we’ll build DIFF, which introduces difference expressions.</p>
+<p>Adding them requires the grammar, AST, parser, and evaluator to handle expressions nested inside expressions. I’ll show you how to make those changes while preserving the overall pipeline we established here.</p> </article> <hr class="my-8 border-dashed">  <div id="btt-btn-container" class="fixed inset-e-4 bottom-8 z-50 md:sticky md:inset-e-auto md:float-end md:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-14 rounded-full shadow-xl md:h-8 md:w-fit md:rounded-md md:shadow-none md:focus-visible:rounded-none md:bg-background/35 md:bg-clip-padding md:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-14 scale-110 rounded-full bg-transparent md:hidden md:h-8 md:rounded-md"></span> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 md:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <span class="group-hover:text-accent sr-only text-sm md:not-sr-only"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg> Back to top </span> </button> </div> <script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop / scrollTotal > 0.3;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script> <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8"> <li> <a href="/tags/interpreters/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-mt-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> interpreters </a> </li><li> <a href="/tags/programming-languages/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-mt-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> programming languages </a> </li><li> <a href="/tags/elm/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-mt-0.5 focus-visible:text-accent focus-visible:border-none text-sm" data-astro-transition-scope="astro-36ssibgs-3"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> elm </a> </li> </ul> <div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start"><span class="italic">Share this post:</span><div class="text-center"><a href="https://wa.me/?text=https://blog.tinyinterpreters.dev/posts/const/" title="Share this post on Whatsapp" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9z" /><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0za5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" /></svg><span class="sr-only">Share this post on Whatsapp</span> </a><a href="https://www.facebook.com/sharer.php?u=https://blog.tinyinterpreters.dev/posts/const/" title="Share this post on Facebook" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M7 10v4h3v7h4v-7h3l1-4h-4V8a1 1 0 0 1 1-1h3V3h-3a5 5 0 0 0-5 5v2z" /></svg><span class="sr-only">Share this post on Facebook</span> </a><a href="https://x.com/intent/post?url=https://blog.tinyinterpreters.dev/posts/const/" title="Share this post on X" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg><span class="sr-only">Share this post on X</span> </a><a href="https://t.me/share/url?url=https://blog.tinyinterpreters.dev/posts/const/" title="Share this post on Telegram" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 10-4 4 6 6 4-16-18 7 4 2 2 6 3-4" /></svg><span class="sr-only">Share this post on Telegram</span> </a><a href="https://pinterest.com/pin/create/button/?url=https://blog.tinyinterpreters.dev/posts/const/" title="Share this post on Pinterest" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m8 20 4-9M10.7 14c.437 1.263 1.43 2 2.55 2 2.071 0 3.75-1.554 3.75-4a5 5 0 1 0-9.7 1.7" /><path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0" /></svg><span class="sr-only">Share this post on Pinterest</span> </a><a href="mailto:?subject=See%20this%20post&amp;body=https://blog.tinyinterpreters.dev/posts/const/" title="Share this post via email" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg><span class="sr-only">Share this post via email</span> </a></div></div> <div class="mt-8"> <script async src="https://giscus.app/client.js" data-repo="tinyinterpreters/blog" data-repo-id="R_kgDOTJXewg" data-category="Announcements" data-category-id="DIC_kwDOTJXews4DCVG3" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="en" data-loading="lazy" crossorigin="anonymous">
+      </script> </div> <hr class="my-8 border-dashed"> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2">   </div> </main> <footer class="app-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/tinyinterpreters" title="Tiny Interpreters on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Tiny Interpreters on Github</span>  </a><a href="mailto:dwayne@tinyinterpreters.dev" title="Send an email to Tiny Interpreters" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Tiny Interpreters</span>  </a> </div> <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row"> <span>Copyright &#169; 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>All rights reserved.</span> </div> </div> </footer>   <script type="module">const c="theme",r="light",n="dark";function s(){const e=localStorage.getItem(c);return e||(window.matchMedia("(prefers-color-scheme: dark)").matches?n:r)}let t=window.__theme?.value??s();function a(){localStorage.setItem(c,t),m()}function m(){const e=document.firstElementChild;e?.setAttribute("data-theme",t),e?.classList.toggle("dark",t===n),document.querySelector("#theme-btn")?.setAttribute("aria-label",t);const o=window.getComputedStyle(document.body).backgroundColor;document.querySelector("meta[name='theme-color']")?.setAttribute("content",o)}function d(){m(),document.querySelector("#theme-btn")?.addEventListener("click",()=>{t=t===r?n:r,a()})}d();document.addEventListener("astro:after-swap",d);document.addEventListener("astro:before-swap",e=>{const o=document.querySelector("meta[name='theme-color']")?.getAttribute("content");o&&e.newDocument.querySelector("meta[name='theme-color']")?.setAttribute("content",o)});window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",({matches:e})=>{t=e?n:r,a()});</script> </body> </html> <script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  function addHeadingLinks() {
+    const headings = Array.from(
+      document.querySelectorAll("h2, h3, h4, h5, h6")
+    );
+    for (const heading of headings) {
+      heading.classList.add("group");
+      const link = document.createElement("a");
+      link.className =
+        "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
+      link.href = "#" + heading.id;
+
+      const span = document.createElement("span");
+      span.ariaHidden = "true";
+      span.innerText = "#";
+      link.appendChild(span);
+      heading.appendChild(link);
+    }
+  }
+  addHeadingLinks();
+
+  function attachCopyButtons() {
+    const copyButtonLabel = "Copy";
+    const codeBlocks = Array.from(document.querySelectorAll("pre:not(.mermaid)"));
+
+    for (const codeBlock of codeBlocks) {
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "relative";
+
+      const computedStyle = getComputedStyle(codeBlock);
+      const hasFileNameOffset =
+        computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
+
+      const topClass = hasFileNameOffset
+        ? "top-(--file-name-offset)"
+        : "-top-3";
+
+      const copyButton = document.createElement("button");
+      copyButton.className = `copy-code absolute end-3 ${topClass} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
+      copyButton.innerHTML = copyButtonLabel;
+      codeBlock.setAttribute("tabindex", "0");
+      codeBlock.appendChild(copyButton);
+
+      codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(codeBlock);
+
+      copyButton.addEventListener("click", async () => {
+        await copyCode(codeBlock, copyButton);
+      });
+    }
+
+    async function copyCode(block, button) {
+      const code = block.querySelector("code");
+      const text = code?.innerText;
+
+      await navigator.clipboard.writeText(text ?? "");
+
+      button.innerText = "Copied";
+
+      setTimeout(() => {
+        button.innerText = copyButtonLabel;
+      }, 700);
+    }
+  }
+  attachCopyButtons();
+
+  /** Accessible image lightbox for article images. */
+  function initLightbox() {
+    const article = document.getElementById("article");
+    if (!article) return;
+
+    const prefersReducedMotion = () =>
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let overlay = null;
+    let lastFocused = null;
+
+    // Defer attribute mutations so they don't push the LCP timestamp.
+    // Event listeners below use delegation and don't need the attributes to exist yet.
+    requestAnimationFrame(() => {
+      const images = Array.from(article.querySelectorAll("img"));
+      for (const image of images) {
+        if (image.closest("a")) continue;
+        image.setAttribute("role", "button");
+        image.setAttribute("tabindex", "0");
+        image.setAttribute("aria-haspopup", "dialog");
+        image.setAttribute(
+          "aria-label",
+          image.alt ? `Zoom image: ${image.alt}` : "Zoom image"
+        );
+      }
+    });
+
+    function open(src, alt, trigger) {
+      if (overlay) return;
+      lastFocused = trigger ?? document.activeElement;
+
+      overlay = document.createElement("div");
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute(
+        "aria-label",
+        alt ? `Image preview: ${alt}` : "Image preview"
+      );
+      overlay.className =
+        "fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-200 motion-reduce:transition-none";
+
+      const closeButton = document.createElement("button");
+      closeButton.type = "button";
+      closeButton.setAttribute("aria-label", "Close image preview");
+      closeButton.className =
+        "absolute end-4 top-4 rounded p-2 text-3xl leading-none text-white";
+      closeButton.innerHTML = "&#10005;";
+      closeButton.addEventListener("click", close);
+
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = "";
+      image.className =
+        "max-h-[90dvh] max-w-[90dvw] cursor-default object-contain";
+
+      overlay.append(closeButton, image);
+      overlay.addEventListener("click", e => {
+        if (e.target === overlay && currentScale <= 1) close();
+      });
+
+      let currentScale = 1;
+      let translateX = 0;
+      let translateY = 0;
+      let initialDist = 0;
+      let initialScale = 1;
+      let panStartX = 0;
+      let panStartY = 0;
+      let panStartTranslateX = 0;
+      let panStartTranslateY = 0;
+      let lastTapTime = 0;
+
+      function applyTransform() {
+        image.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
+      }
+
+      function resetTransform() {
+        currentScale = 1;
+        translateX = 0;
+        translateY = 0;
+        image.style.transform = "";
+      }
+
+      overlay.addEventListener(
+        "touchstart",
+        e => {
+          const t = e.touches;
+          if (t.length === 2) {
+            initialDist = Math.hypot(
+              t[1].clientX - t[0].clientX,
+              t[1].clientY - t[0].clientY
+            );
+            initialScale = currentScale;
+          } else if (t.length === 1) {
+            const now = Date.now();
+            if (now - lastTapTime < 300) {
+              e.preventDefault();
+              if (currentScale > 1) {
+                resetTransform();
+              } else {
+                currentScale = 2;
+                translateX = 0;
+                translateY = 0;
+                applyTransform();
+              }
+              lastTapTime = 0;
+              panStartX = t[0].clientX;
+              panStartY = t[0].clientY;
+              panStartTranslateX = translateX;
+              panStartTranslateY = translateY;
+            } else {
+              lastTapTime = now;
+              if (currentScale > 1) {
+                panStartX = t[0].clientX;
+                panStartY = t[0].clientY;
+                panStartTranslateX = translateX;
+                panStartTranslateY = translateY;
+              }
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      overlay.addEventListener(
+        "touchmove",
+        e => {
+          const t = e.touches;
+          if (t.length === 2) {
+            e.preventDefault();
+            const dist = Math.hypot(
+              t[1].clientX - t[0].clientX,
+              t[1].clientY - t[0].clientY
+            );
+            currentScale = Math.min(
+              4,
+              Math.max(1, initialScale * (dist / initialDist))
+            );
+            applyTransform();
+          } else if (t.length === 1) {
+            if (currentScale > 1) {
+              e.preventDefault();
+              translateX =
+                panStartTranslateX + (t[0].clientX - panStartX) / currentScale;
+              translateY =
+                panStartTranslateY + (t[0].clientY - panStartY) / currentScale;
+              const maxX = Math.max(
+                0,
+                (image.clientWidth - overlay.clientWidth / currentScale) / 2
+              );
+              const maxY = Math.max(
+                0,
+                (image.clientHeight - overlay.clientHeight / currentScale) / 2
+              );
+              translateX = Math.min(maxX, Math.max(-maxX, translateX));
+              translateY = Math.min(maxY, Math.max(-maxY, translateY));
+              applyTransform();
+            } else {
+              e.preventDefault();
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      overlay.addEventListener("touchend", e => {
+        if (e.touches.length === 0 && currentScale <= 1.05) {
+          resetTransform();
+        }
+      });
+
+      overlay.addEventListener("touchcancel", e => {
+        if (e.touches.length === 0 && currentScale <= 1.05) {
+          resetTransform();
+        }
+      });
+
+      document.body.appendChild(overlay);
+      document.body.style.overflow = "hidden";
+      document.addEventListener("keydown", onKeyDown);
+      window.__closeLightbox = close;
+
+      requestAnimationFrame(() => overlay?.classList.add("opacity-100"));
+      closeButton.focus();
+    }
+
+    function close() {
+      if (!overlay) return;
+      const el = overlay;
+      overlay = null;
+      window.__closeLightbox = null;
+
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+      lastFocused?.focus();
+      lastFocused = null;
+
+      if (prefersReducedMotion()) {
+        el.remove();
+        return;
+      }
+      const remove = () => el.remove();
+      el.addEventListener("transitionend", remove, { once: true });
+      setTimeout(remove, 250); // fallback in case transitionend never fires
+      el.classList.remove("opacity-100");
+    }
+
+    function onKeyDown(e) {
+      if (e.key === "Escape") {
+        close();
+      } else if (e.key === "Tab") {
+        trapFocus(e);
+      }
+    }
+
+    // Keep keyboard focus inside the open dialog.
+    function trapFocus(e) {
+      if (!overlay) return;
+      const focusables = overlay.querySelectorAll(
+        'a[href], button, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function triggerFromEvent(e) {
+      const image = e.target.closest("img");
+      if (!image || !article.contains(image) || image.closest("a")) return null;
+      return image;
+    }
+
+    function activate(image) {
+      open(image.currentSrc || image.src, image.alt, image);
+    }
+
+    article.addEventListener("click", e => {
+      const image = triggerFromEvent(e);
+      if (!image) return;
+      e.preventDefault();
+      activate(image);
+    });
+
+    article.addEventListener("keydown", e => {
+      if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+      const image = triggerFromEvent(e);
+      if (!image) return;
+      e.preventDefault();
+      activate(image);
+    });
+  }
+  initLightbox();
+
+  if (!window.__lightboxSwapBound) {
+    window.__lightboxSwapBound = true;
+    document.addEventListener("astro:before-swap", () =>
+      window.__closeLightbox?.()
+    );
+  }
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>
