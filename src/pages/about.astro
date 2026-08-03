@@ -4,6 +4,7 @@ import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Breadcrumb from "@/components/Breadcrumb.astro";
 import Main from "@/components/Main.astro";
+import NewsletterSignup from "@/components/NewsletterSignup.astro";
 import Footer from "@/components/Footer.astro";
 import config from "@/config";
 
@@ -28,8 +29,12 @@ const { Content } = await render(about);
 
   <Breadcrumb />
 
-  <Main pageTitle={about.data.title} class="app-prose">
-    <Content />
+  <Main pageTitle={about.data.title}>
+    <div class="app-prose">
+      <Content />
+    </div>
+
+    <NewsletterSignup class="my-12" />
   </Main>
 
   <Footer />

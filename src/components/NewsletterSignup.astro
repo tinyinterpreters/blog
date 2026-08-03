@@ -1,0 +1,20 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<aside
+  aria-label="Follow Tiny Interpreters"
+  class:list={["w-full", className]}
+>
+  <script
+    is:inline
+    data-astro-rerun
+    async
+    data-uid="a375893292"
+    src="https://tinyinterpreters.kit.com/a375893292/index.js"
+  ></script>
+</aside>
