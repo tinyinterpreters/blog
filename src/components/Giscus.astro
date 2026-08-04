@@ -1,0 +1,47 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class={className} data-giscus-container></div>
+
+<script>
+  function loadGiscus() {
+    const container = document.querySelector("[data-giscus-container]");
+
+    if (!(container instanceof HTMLDivElement)) {
+      return;
+    }
+
+    // Prevent duplicate widgets during navigation or development reloads
+    container.replaceChildren();
+
+    const script = document.createElement("script");
+
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.crossOrigin = "anonymous";
+
+    Object.assign(script.dataset, {
+      repo: "tinyinterpreters/blog",
+      repoId: "R_kgDOTJXewg",
+      category: "Announcements",
+      categoryId: "DIC_kwDOTJXews4DCVG3",
+      mapping: "pathname",
+      strict: "1",
+      reactionsEnabled: "1",
+      emitMetadata: "0",
+      inputPosition: "top",
+      theme: "preferred_color_scheme",
+      lang: "en",
+      loading: "lazy",
+    });
+
+    container.appendChild(script);
+  }
+
+  document.addEventListener("astro:page-load", loadGiscus);
+</script>

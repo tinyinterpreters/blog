@@ -5,6 +5,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Datetime from "@/components/Datetime.astro";
 import Tag from "@/components/Tag.astro";
+import Giscus from "@/components/Giscus.astro";
 import NewsletterSignup from "@/components/NewsletterSignup.astro";
 import { getPostSlug, getPostUrl } from "@/utils/getPostPaths";
 import { getSortedPosts } from "@/utils/getSortedPosts";
@@ -160,26 +161,7 @@ const ogImage = ogImageUrl
 
     <ShareLinks />
 
-    <div class="mt-8">
-      <script
-        is:inline
-        async
-        src="https://giscus.app/client.js"
-        data-repo="tinyinterpreters/blog"
-        data-repo-id="R_kgDOTJXewg"
-        data-category="Announcements"
-        data-category-id="DIC_kwDOTJXews4DCVG3"
-        data-mapping="pathname"
-        data-strict="1"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme="preferred_color_scheme"
-        data-lang="en"
-        data-loading="lazy"
-        crossorigin="anonymous">
-      </script>
-    </div>
+    <Giscus class="mt-8" />
 
     <hr class="my-8 border-dashed" />
 
