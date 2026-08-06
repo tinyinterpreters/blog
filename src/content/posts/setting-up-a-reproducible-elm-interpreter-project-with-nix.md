@@ -260,7 +260,7 @@ Each module has a familiar responsibility:
 - `AST.elm` defines the types used to represent programs.
 - `Lexer.elm` recognizes the smallest pieces of syntax.
 - `Parser.elm` turns source text into an AST.
-- `Interpreter.elm` runs complete programs from source text to value.
+- `Interpreter.elm` runs complete programs from source text to evaluated result.
 
 For DIFF, the directory and module namespace will change from `CONST` to `DIFF`, but the basic organization will remain the same.
 
