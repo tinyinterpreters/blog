@@ -618,6 +618,6 @@ The complete path from source text to result is now in place. Future interpreter
 
 ## Where we go next
 
-Next, we'll build DIFF, which introduces difference expressions.
+Next, we'll build [DIFF](/posts/diff), which introduces difference expressions.
 
 Adding them requires the grammar, AST, parser, and evaluator to handle expressions nested inside expressions. I'll show you how to make those changes while preserving the overall pipeline we established here.

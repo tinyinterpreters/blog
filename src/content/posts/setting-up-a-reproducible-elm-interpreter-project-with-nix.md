@@ -10,7 +10,7 @@ tags:
 
 In [CONST: The Structure of a Tiny Interpreter in Elm](/posts/const), we established the structure of a tiny interpreter. Then, in [Testing an Elm Interpreter with elm-test](/posts/testing-an-elm-interpreter-with-elm-test), we looked more closely at how its tests are organized.
 
-Before moving on to DIFF, let’s step back and set up the reusable project foundation shared by these interpreters:
+Before moving on to [DIFF: Adding Recursive Expressions to a Tiny Interpreter in Elm](/posts/diff), let’s step back and set up the reusable project foundation shared by these interpreters:
 
 - `elm`, `elm-format`, and `elm-test`
 - a consistent source and test-module hierarchy
@@ -504,4 +504,4 @@ We now have a reusable foundation for the interpreters in this series: the devel
 
 Later posts can therefore concentrate on what changes from one interpreter to the next: the grammar, lexer, AST, parser, evaluator, and tests.
 
-Next, we’ll use this foundation to add difference expressions in DIFF.
+Next, we’ll use this foundation to add difference expressions in [DIFF](/posts/diff).
