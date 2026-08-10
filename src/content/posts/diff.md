@@ -478,7 +478,7 @@ VNumber 3
 
 The parser tests document which source programs DIFF accepts and which ASTs they produce.
 
-These tests use the `testValue` helper we developed in [Testing Tiny Interpreters in Elm](/posts/testing-an-elm-interpreter-with-elm-test).
+These tests use the `testValue` helper we developed in [Testing an Elm Interpreter with elm-test](/posts/testing-an-elm-interpreter-with-elm-test).
 
 We keep a constant expression to confirm that constant expressions inherited from CONST still work, then add examples of basic and nested difference expressions:
 
