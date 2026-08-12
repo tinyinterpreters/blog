@@ -270,7 +270,7 @@ We start with the AST constructor we want to produce:
 P.succeed Diff
 ```
 
-The [`|.`](https://package.elm-lang.org/packages/elm/parser/latest/Parser#(|.)) operators parse and discard the symbols that belong to the concrete syntax:
+The [`|.`](https://package.elm-lang.org/packages/elm/parser/latest/Parser#|.) operators parse and discard the symbols that belong to the concrete syntax:
 
 ```elm
 |. L.symbol "-"
@@ -279,7 +279,7 @@ The [`|.`](https://package.elm-lang.org/packages/elm/parser/latest/Parser#(|.)) 
 |. L.symbol ")"
 ```
 
-The [`|=`](https://package.elm-lang.org/packages/elm/parser/latest/Parser#(|=)) operators parse and keep the two operands:
+The [`|=`](https://package.elm-lang.org/packages/elm/parser/latest/Parser#|=) operators parse and keep the two operands:
 
 ```elm
 |= expr
