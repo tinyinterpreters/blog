@@ -619,7 +619,7 @@ The new syntax is small, but the change is structural. A difference expression c
 
 ## Where we go next
 
-Our next interpreter, ZERO, will introduce a second kind of value: Booleans.
+Our next interpreter, [ZERO](/posts/zero), will introduce a second kind of value: Booleans.
 
 Before we build ZERO, think through what introducing Booleans might require us to change. How might the grammar, lexer, AST, parser, evaluator, and tests need to evolve?
 
