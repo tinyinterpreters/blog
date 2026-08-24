@@ -507,7 +507,7 @@ The `testRun` helper compares the actual result with the corresponding `Expected
 
 Our interpreter can now produce Boolean values, but no expression can use one successfully. A Boolean can be the final result of a program, but it can't yet influence which expression is evaluated next.
 
-Our next interpreter, IF, will add conditional expressions. That introduces a new question about evaluation:
+Our next interpreter, [IF](/posts/if), will add conditional expressions. That introduces a new question about evaluation:
 
 > After evaluating the condition, should we evaluate both branches and then choose a result, or evaluate only the selected branch?
 
