@@ -346,7 +346,7 @@ The final two tests verify that only the selected branch is evaluated. The first
 
 Our programs still cannot refer to values by name.
 
-Next, in VAR, we'll add variable expressions. That will raise a new question for the interpreter:
+Next, in [VAR](/posts/var), we'll add variable expressions. That will raise a new question for the interpreter:
 
 > When we encounter a variable, how do we find the value associated with its name?
 
