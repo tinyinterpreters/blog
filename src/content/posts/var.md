@@ -165,7 +165,7 @@ keywords =
 
 `L.id keywords` parses an identifier and returns its name as a `String`. `P.map Var` uses that name to construct a variable expression.
 
-We don’t include `zero?` in the list because it cannot match the identifier grammar.
+We don't include `zero?` in the list because it cannot match the identifier grammar.
 
 ## Evaluating variable references with an environment
 
@@ -179,7 +179,7 @@ For VAR, an environment only needs to support three operations:
 - associate a name with a value;
 - look up the value associated with a name.
 
-We could use Elm’s `Dict` type directly throughout the interpreter, but instead we’ll hide it behind a small `VAR.Env` module:
+We could use Elm's `Dict` type directly throughout the interpreter, but instead we'll hide it behind a small `VAR.Env` module:
 
 ```elm
 module VAR.Env exposing (Env, empty, extend, lookup)
@@ -246,7 +246,7 @@ initEnv =
 
 VAR cannot extend the environment during evaluation yet, so `initEnv` is the only environment used.
 
-### Looking up a variable’s value
+### Looking up a variable's value
 
 The `Var` branch implements the lookup rule we defined earlier:
 
@@ -410,7 +410,7 @@ The first test checks a direct variable lookup. The second confirms that the env
 
 ## What VAR changed
 
-Before VAR, the evaluator could determine an expression’s value from the AST alone. A variable expression changes that because the AST contains a name, but not the value associated with that name.
+Before VAR, the evaluator could determine an expression's value from the AST alone. A variable expression changes that because the AST contains a name, but not the value associated with that name.
 
 The evaluator needs an environment. The `Var` branch looks up a name in that environment, while every recursive call passes the environment along so that variables can appear inside larger expressions.
 
@@ -420,8 +420,8 @@ VAR also adds another way evaluation can fail. An identifier can be syntacticall
 
 VAR lets programs refer to names, but they still cannot introduce names of their own.
 
-Next, we’ll add a language feature that introduces a new name by extending the environment, then evaluates an expression in that extended environment.
+Next, in [LET](https://blog.tinyinterpreters.dev/posts/let), we'll add `let` expressions so programs can create their own bindings. That gives us a few choices to make:
 
-That raises our next question:
-
-> When a program introduces a name, which expressions should be able to use it?
+- Which expressions should be able to use a new binding?
+- What should happen if the same name is already bound?
+- Should we evaluate the expression that supplies a binding's value even if the program never uses that binding?
