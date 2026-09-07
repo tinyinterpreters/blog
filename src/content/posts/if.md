@@ -79,7 +79,7 @@ if 0 then 2 else 3
 
 This is syntactically valid because it follows the structure defined by the grammar. However, the grammar does not enforce that the condition evaluates to a Boolean value—it only specifies that an expression can appear in that position. Enforcing the requirement that the condition produces a Boolean is the responsibility of the evaluator.
 
-The new concrete syntax introduces the reserved words `if`, `then`, and `else`, but we don’t need to change the lexer. We can recognize them using the existing `keyword` helper introduced in [ZERO](/posts/zero).
+The new concrete syntax introduces the reserved words `if`, `then`, and `else`, but we don't need to change the lexer. We can recognize them using the existing `keyword` helper introduced in [ZERO](/posts/zero).
 
 ## Representing conditional expressions in the AST
 

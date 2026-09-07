@@ -495,7 +495,7 @@ Err err ->
     Err <| SyntaxError err
 ```
 
-This lets `run` report the parser error using the interpreter’s own `Error` type.
+This lets `run` report the parser error using the interpreter's own `Error` type.
 
 If parsing succeeds, `run` passes the resulting AST to `runProgram`:
 
@@ -533,7 +533,7 @@ evaluates to:
 VNumber 123
 ```
 
-`Const 123` is an AST node representing a constant expression in the parsed program. `VNumber 123` is an interpreter value representing the program’s numeric result, `123`.
+`Const 123` is an AST node representing a constant expression in the parsed program. `VNumber 123` is an interpreter value representing the program's numeric result, `123`.
 
 CONST has only one `Expr` constructor, so `runExpr` needs only one branch. Each new kind of expression we add later will require us to define how that expression evaluates.
 
@@ -585,7 +585,7 @@ They also show that the entire input must form a valid CONST program. `onetwothr
 
 These tests describe the language from the outside because they pass source text to the public `run` function and inspect the final outcome. They do not depend on how the lexer, parser, or evaluator is organized internally.
 
-The `testValue` helper hides the mechanics of constructing each test while leaving the language examples visible. I’ll cover how that helper works in a separate post about testing Tiny Interpreters.
+The `testValue` helper hides the mechanics of constructing each test while leaving the language examples visible. I'll cover how that helper works in a separate post about testing Tiny Interpreters.
 
 ## What we learned
 
@@ -605,14 +605,14 @@ flowchart TD
     B -->|evaluate| C["VNumber 123"]
 ```
 
-Building that path gave us the basic structure we’ll reuse as the language grows:
+Building that path gave us the basic structure we'll reuse as the language grows:
 
 - The grammar describes which programs belong to the language.
 - Lexical parsers recognize the basic pieces of source text.
 - The parser turns valid source text into an AST.
 - The AST represents the meaningful structure of the parsed program.
-- Evaluation turns the AST into an interpreter value representing the program’s result.
-- Tests describe the language’s behaviour through its public interface.
+- Evaluation turns the AST into an interpreter value representing the program's result.
+- Tests describe the language's behaviour through its public interface.
 
 The complete path from source text to result is now in place. Future interpreters will preserve this structure while adding new kinds of expressions and defining how they are parsed, represented, evaluated, and tested.
 

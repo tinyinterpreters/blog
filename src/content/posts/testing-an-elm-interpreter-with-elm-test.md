@@ -36,13 +36,13 @@ We can describe that behaviour by testing CONST at three boundaries:
 
 Together, those tests form an executable description of the language. Lexer tests show which pieces of syntax are recognized. Parser tests show which source texts form complete programs and which ASTs they produce. Interpreter tests show what those programs mean.
 
-We’ll also develop a small testing helper. Rather than designing the abstraction upfront, we’ll let it emerge from the repeated shape of the tests.
+We'll also develop a small testing helper. Rather than designing the abstraction upfront, we'll let it emerge from the repeated shape of the tests.
 
 ## Table of contents
 
 ## Test the CONST lexer
 
-CONST’s lexer exposes a parser called `digits`:
+CONST's lexer exposes a parser called `digits`:
 
 ```elm
 digits : Parser Int
@@ -95,7 +95,7 @@ suite =
 
 These tests reveal three important parts of `digits` behaviour.
 
-First, it accepts a number with or without trailing spaces. That’s because `digits` is a lexeme parser: it parses the number and then consumes any spaces following it.
+First, it accepts a number with or without trailing spaces. That's because `digits` is a lexeme parser: it parses the number and then consumes any spaces following it.
 
 Second, it rejects leading spaces:
 
@@ -176,9 +176,9 @@ testDigits ( input, expectedOutput ) =
                         Expect.fail (Debug.toString e)
 ```
 
-`Debug.toString` lets the helper display arbitrary Elm values and parser errors when a test fails, so we don’t need separate formatting functions just for our tests. Uses of the `Debug` module must be removed from optimized production code, but it can remain in test code.
+`Debug.toString` lets the helper display arbitrary Elm values and parser errors when a test fails, so we don't need separate formatting functions just for our tests. Uses of the `Debug` module must be removed from optimized production code, but it can remain in test code.
 
-For now, we’ll keep `testDigits` in the lexer test module. We’ve only seen this repeated shape in one suite, so there is no reason to make it a shared abstraction yet.
+For now, we'll keep `testDigits` in the lexer test module. We've only seen this repeated shape in one suite, so there is no reason to make it a shared abstraction yet.
 
 The suite can now emphasize the examples:
 
@@ -358,17 +358,17 @@ List.map (testValue P.parse)
 
 The shared helper handles the repeated testing mechanics, while each suite still shows the function being tested, the source input, and the expected result.
 
-There’s one limitation.
+There's one limitation.
 
 `Nothing` means only that we expect some error. It doesn't check which error occurred.
 
-That’s enough for CONST because its interpreter currently reports only syntax errors, and our immediate concern is whether an input succeeds or fails. Once an interpreter can fail in meaningfully different ways, such as with either a syntax error or a runtime error, checking only for `Nothing` could allow a test to pass even when the program failed for the wrong reason.
+That's enough for CONST because its interpreter currently reports only syntax errors, and our immediate concern is whether an input succeeds or fails. Once an interpreter can fail in meaningfully different ways, such as with either a syntax error or a runtime error, checking only for `Nothing` could allow a test to pass even when the program failed for the wrong reason.
 
-We don’t need to solve that problem before we encounter it.
+We don't need to solve that problem before we encounter it.
 
 ## Test the CONST interpreter
 
-The interpreter’s `run` function is the main public entry point:
+The interpreter's `run` function is the main public entry point:
 
 ```elm
 run : String -> Result Error Value
@@ -376,7 +376,7 @@ run : String -> Result Error Value
 
 It accepts source text, parses it, evaluates the resulting AST, and returns either an error or a value.
 
-Testing `run` gives us the most complete outside view of CONST. Each test starts with source text and checks the final result. It doesn’t need to know how the parser or evaluator works internally:
+Testing `run` gives us the most complete outside view of CONST. Each test starts with source text and checks the final result. It doesn't need to know how the parser or evaluator works internally:
 
 ```elm
 module Test.CONST.Interpreter exposing (suite)
@@ -409,7 +409,7 @@ The suite shows that CONST accepts a non-negative integer literal with leading o
 " 123" → VNumber 123
 ```
 
-`VNumber 123` represents the program’s numeric result, `123`.
+`VNumber 123` represents the program's numeric result, `123`.
 
 Inputs that do not form complete CONST programs are rejected:
 
@@ -441,7 +441,7 @@ We can reuse this structure in each later interpreter as it adds more syntax, AS
 
 The existing examples should remain too. When a later interpreter adds a new kind of expression, it should still confirm that programs supported by earlier interpreters behave as expected.
 
-The examples will grow, and the helpers may evolve when the language needs more precise tests. We’ll continue asking the same basic questions: What source text are we testing? What result should it produce? Which inputs should produce an error?
+The examples will grow, and the helpers may evolve when the language needs more precise tests. We'll continue asking the same basic questions: What source text are we testing? What result should it produce? Which inputs should produce an error?
 
 ## What we learned
 
@@ -451,4 +451,4 @@ Using the same source inputs at different boundaries makes their responsibilitie
 
 The shared `testValue` helper emerged only after the lexer and parser tests revealed the same repeated shape. It hides the testing mechanics while leaving the source inputs and expected results visible.
 
-That’s the approach we’ll carry into the rest of the series: describe the language with concrete examples, run those examples as tests, and extract abstractions only when the repetition justifies them.
+That's the approach we'll carry into the rest of the series: describe the language with concrete examples, run those examples as tests, and extract abstractions only when the repetition justifies them.

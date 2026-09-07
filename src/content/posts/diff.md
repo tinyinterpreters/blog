@@ -22,7 +22,7 @@ This expression subtracts the second operand from the first, producing:
 VNumber 333
 ```
 
-What matters here isn’t subtraction itself, but that each operand is also an expression. That means either operand can contain another difference expression:
+What matters here isn't subtraction itself, but that each operand is also an expression. That means either operand can contain another difference expression:
 
 ```txt
 -(2, -(4, 3))
@@ -30,7 +30,7 @@ What matters here isn’t subtraction itself, but that each operand is also an e
 
 Once an expression can contain other expressions, recursion appears across several layers of the interpreter.
 
-In this article, we’ll extend the grammar, lexer, AST, parser, and evaluator to support difference expressions and see where that recursive structure appears.
+In this article, we'll extend the grammar, lexer, AST, parser, and evaluator to support difference expressions and see where that recursive structure appears.
 
 You can find the [complete source code for DIFF on GitHub](https://github.com/tinyinterpreters/diff).
 
@@ -52,7 +52,7 @@ DIFF uses this syntax instead of conventional infix subtraction:
 456 - 123
 ```
 
-The prefix-style syntax keeps the grammar simple. We don’t need to introduce operator precedence, associativity, or additional grouping rules yet, so we can stay focused on how recursive expressions affect the interpreter.
+The prefix-style syntax keeps the grammar simple. We don't need to introduce operator precedence, associativity, or additional grouping rules yet, so we can stay focused on how recursive expressions affect the interpreter.
 
 ### What does a difference expression mean?
 
@@ -98,9 +98,9 @@ but not nested ones such as:
 -(2, -(4, 3))
 ```
 
-In the nested example, the second operand isn’t a number literal. It’s another difference expression, which is why using `Expr` is essential.
+In the nested example, the second operand isn't a number literal. It's another difference expression, which is why using `Expr` is essential.
 
-Right now, an operand can be a `Const` or another `Diff`. As we add more expression forms later, they’ll also be able to appear inside a difference expression without changing this rule.
+Right now, an operand can be a `Const` or another `Diff`. As we add more expression forms later, they'll also be able to appear inside a difference expression without changing this rule.
 
 The grammar is recursive because `Expr` can expand to `Diff`, while `Diff` refers back to `Expr` for both operands. This indirect recursion is what allows an expression to contain other expressions.
 
@@ -218,9 +218,9 @@ Missing possibilities include:
     Diff _ _
 ```
 
-The compiler can’t decide what a difference expression should mean, but it can tell us that the evaluator still reflects the old AST.
+The compiler can't decide what a difference expression should mean, but it can tell us that the evaluator still reflects the old AST.
 
-We’ll define the new branch when we reach the evaluator. For now, the error shows an important benefit of modelling language features with custom types: when the language grows, Elm helps us find the code that must grow with it.
+We'll define the new branch when we reach the evaluator. For now, the error shows an important benefit of modelling language features with custom types: when the language grows, Elm helps us find the code that must grow with it.
 
 ## Parsing recursive expressions
 
@@ -311,13 +311,13 @@ definitions:
     └─────┘
 ```
 
-The recursive grammar itself isn’t the problem. A difference expression needs to contain other expressions.
+The recursive grammar itself isn't the problem. A difference expression needs to contain other expressions.
 
 The problem is that `expr` and `diffExpr` are parser values that immediately depend on each other. To construct `expr`, Elm needs `diffExpr`. But to construct `diffExpr`, it needs `expr`.
 
 Neither definition can be completed first.
 
-What we need is a way to delay obtaining the `expr` parser until parsing reaches an operand. That’s what `P.lazy` allows us to do.
+What we need is a way to delay obtaining the `expr` parser until parsing reaches an operand. That's what `P.lazy` allows us to do.
 
 ## Using `P.lazy` for recursive parsers
 
@@ -394,7 +394,7 @@ runExpr b
 
 and pass their values to `evalDiff`, which extracts the two numbers and subtracts the second from the first.
 
-The evaluator is recursive because the AST is recursive. We didn’t add recursion as a separate technique; it follows naturally from the shape of the data being evaluated.
+The evaluator is recursive because the AST is recursive. We didn't add recursion as a separate technique; it follows naturally from the shape of the data being evaluated.
 
 For our running example:
 
@@ -427,15 +427,15 @@ VNumber 1
 
 The `evalDiff` helper keeps two steps separate: `runExpr` evaluates the operand expressions, then `evalDiff` applies subtraction to the resulting values.
 
-### Computing values that can’t be written as literals
+### Computing values that can't be written as literals
 
-DIFF’s grammar only supports non-negative integer literals:
+DIFF's grammar only supports non-negative integer literals:
 
 ```txt
 Number ::= [0-9]+
 ```
 
-This means the following isn’t a valid DIFF program:
+This means the following isn't a valid DIFF program:
 
 ```txt
 -1
@@ -571,11 +571,11 @@ suite =
         ]
 ```
 
-Elm’s compiler and these tests check different things.
+Elm's compiler and these tests check different things.
 
 When we added `Diff` to the AST, the compiler told us that `runExpr` needed another branch. It can ensure that the `case` expression handles every kind of `Expr`.
 
-It can’t ensure that we gave `Diff` the correct meaning. Each of these implementations would still type-check:
+It can't ensure that we gave `Diff` the correct meaning. Each of these implementations would still type-check:
 
 ```elm
 VNumber <| a + b
@@ -606,7 +606,7 @@ Together, the compiler and tests give us different kinds of confidence: the comp
 
 ## What DIFF adds to the interpreter
 
-Adding difference expressions changes each layer of the implementation we’ve been following:
+Adding difference expressions changes each layer of the implementation we've been following:
 
 - **Grammar:** `Expr` can now be either a `Const` or a `Diff`. The grammar is recursive because `Expr` can expand to `Diff`, whose operands are themselves expressions.
 - **Lexer:** The new `symbol` helper recognizes `-`, `(`, `,`, and `)` while consuming trailing whitespace.
@@ -623,4 +623,4 @@ Our next interpreter, [ZERO](/posts/zero), will introduce a second kind of value
 
 Before we build ZERO, think through what introducing Booleans might require us to change. How might the grammar, lexer, AST, parser, evaluator, and tests need to evolve?
 
-We’ll answer those questions when we build ZERO.
+We'll answer those questions when we build ZERO.

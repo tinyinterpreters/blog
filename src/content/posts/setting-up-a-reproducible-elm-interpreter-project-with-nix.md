@@ -10,20 +10,20 @@ tags:
 
 In [CONST: The Structure of a Tiny Interpreter in Elm](/posts/const), we established the structure of a tiny interpreter. Then, in [Testing an Elm Interpreter with elm-test](/posts/testing-an-elm-interpreter-with-elm-test), we looked more closely at how its tests are organized.
 
-Before moving on to [DIFF: Adding Recursive Expressions to a Tiny Interpreter in Elm](/posts/diff), let’s step back and set up the reusable project foundation shared by these interpreters:
+Before moving on to [DIFF: Adding Recursive Expressions to a Tiny Interpreter in Elm](/posts/diff), let's step back and set up the reusable project foundation shared by these interpreters:
 
 - `elm`, `elm-format`, and `elm-test`
 - a consistent source and test-module hierarchy
 - helper commands for common development tasks
 - a place to document the language grammar
 
-We use Nix to provide the development tools and record the resolved inputs so the environment can be recreated later. This isn’t a general introduction to Nix or an argument that every Elm project should use it. We only need enough Nix to create and enter the project environment.
+We use Nix to provide the development tools and record the resolved inputs so the environment can be recreated later. This isn't a general introduction to Nix or an argument that every Elm project should use it. We only need enough Nix to create and enter the project environment.
 
 ## Table of contents
 
 ## Prerequisites
 
-You’ll need:
+You'll need:
 
 - Git
 - [Nix](https://zero-to-nix.com/start/install/) with the `nix-command` and `flakes` features enabled
@@ -31,7 +31,7 @@ You’ll need:
 
 ## Create the repository
 
-We’ll use CONST as the example:
+We'll use CONST as the example:
 
 ```bash
 git init const
@@ -41,7 +41,7 @@ touch README.md flake.nix
 
 For another interpreter, use its lowercase name in the first two commands.
 
-Every interpreter repository will have a `README.md`, though we won’t cover its contents here.
+Every interpreter repository will have a `README.md`, though we won't cover its contents here.
 
 ## Define the Nix development environment
 
@@ -179,7 +179,7 @@ Create `.gitignore` at the root of the project:
 elm-stuff/
 ```
 
-`elm-stuff` contains generated build data and doesn’t need to be committed.
+`elm-stuff` contains generated build data and doesn't need to be committed.
 
 ## Initialize Elm and the tests
 
@@ -199,7 +199,7 @@ This creates:
 └── elm.json
 ```
 
-The interpreter’s source modules will live under `src`.
+The interpreter's source modules will live under `src`.
 
 Our interpreters use `elm/parser`, so install it next:
 
@@ -229,13 +229,13 @@ Remove the example:
 rm tests/Example.elm
 ```
 
-We’ll replace it with a structure that mirrors the interpreter modules.
+We'll replace it with a structure that mirrors the interpreter modules.
 
-At this point, both `src` and `tests` exist. Next, we’ll organize the interpreter modules and give the tests a matching structure.
+At this point, both `src` and `tests` exist. Next, we'll organize the interpreter modules and give the tests a matching structure.
 
 ## Organize the interpreter modules
 
-Each interpreter’s source modules live under an uppercase namespace directory in `src`.
+Each interpreter's source modules live under an uppercase namespace directory in `src`.
 
 For CONST:
 
@@ -301,7 +301,7 @@ Test.CONST.Lexer
 
 The same pattern applies to `Parser.elm` and `Interpreter.elm`.
 
-We don’t currently need a test module for `CONST.AST` because it only defines the types used to represent valid programs.
+We don't currently need a test module for `CONST.AST` because it only defines the types used to represent valid programs.
 
 Each test module exposes one value named `suite`:
 
@@ -318,7 +318,7 @@ suite =
         ]
 ```
 
-`elm-test` discovers exposed top-level values with the type `Test`. The value does not have to be named `suite`; that’s just the convention we’ll use throughout the series.
+`elm-test` discovers exposed top-level values with the type `Test`. The value does not have to be named `suite`; that's just the convention we'll use throughout the series.
 
 The top-level `describe` uses the name of the module under test. The specific groups of test cases live inside it.
 
@@ -419,7 +419,7 @@ Const   ::= Number
 Number  ::= [0-9]+
 ```
 
-We’ll also generate a Markdown version of the grammar with railroad diagrams. Once generated, the documentation structure will be:
+We'll also generate a Markdown version of the grammar with railroad diagrams. Once generated, the documentation structure will be:
 
 ```txt
 .
@@ -504,4 +504,4 @@ We now have a reusable foundation for the interpreters in this series: the devel
 
 Later posts can therefore concentrate on what changes from one interpreter to the next: the grammar, lexer, AST, parser, evaluator, and tests.
 
-Next, we’ll use this foundation to add difference expressions in [DIFF](/posts/diff).
+Next, we'll use this foundation to add difference expressions in [DIFF](/posts/diff).

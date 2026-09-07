@@ -41,7 +41,7 @@ diffExpr =
         |. L.symbol ")"
 ```
 
-That’s possible because `digits` and the parsers produced by `symbol` are **lexeme parsers**.
+That's possible because `digits` and the parsers produced by `symbol` are **lexeme parsers**.
 
 A lexeme parser parses one complete lexical unit and then consumes the permitted trailing whitespace. This small convention keeps whitespace handling out of the grammar-level parsers, allowing their structure to remain close to the grammar they implement.
 
@@ -122,7 +122,7 @@ The `lexeme` helper doesn't need to change. We can change what the parser treats
 
 ## Where I learned about lexeme parsers
 
-I first encountered the term **lexeme parser** while reading Daan Leijen’s [_Parsec, a fast combinator parser_](https://users.cecs.anu.edu.au/~Clem.Baker-Finch/parsec.pdf). The paper gave me a name for the convention I’m using here.
+I first encountered the term **lexeme parser** while reading Daan Leijen's [_Parsec, a fast combinator parser_](https://users.cecs.anu.edu.au/~Clem.Baker-Finch/parsec.pdf). The paper gave me a name for the convention I'm using here.
 
 Once I knew what the pattern was called, I became curious about where it came from. Following it backward through earlier parser-combinator papers reveals a few ghosts of the same idea.
 
@@ -130,4 +130,4 @@ Once I knew what the pattern was called, I became curious about where it came fr
 
 - **Daan Leijen, [_Parsec, a fast combinator parser_](https://users.cecs.anu.edu.au/~Clem.Baker-Finch/parsec.pdf) (2001).** This paper uses the term _lexeme parser_ for parsers that skip trailing whitespace.
 - **Graham Hutton and Erik Meijer, [_Monadic Parser Combinators_](https://people.cs.nott.ac.uk/pszgmh/monparsing.pdf) (1996).** This paper describes a close earlier version of the same arrangement. Its `parse` combinator consumes whitespace and comments before the main parser begins, while `token` consumes them after parsers for complete tokens. It even defines `symbol` by applying `token` to a string parser.
-- **Graham Hutton, [_Higher-Order Functions for Parsing_](https://www.cs.nott.ac.uk/~pszgmh/parsing.pdf) (1992).** This paper presents a related earlier approach called `nibble`, which consumes whitespace before and after another parser. Hutton then uses it to define a whitespace-aware `symbol` parser. It isn’t the trailing-whitespace convention used in our parsers, but it shows the same broader idea: whitespace handling can be packaged into a reusable combinator instead of repeated throughout the grammar parser.
+- **Graham Hutton, [_Higher-Order Functions for Parsing_](https://www.cs.nott.ac.uk/~pszgmh/parsing.pdf) (1992).** This paper presents a related earlier approach called `nibble`, which consumes whitespace before and after another parser. Hutton then uses it to define a whitespace-aware `symbol` parser. It isn't the trailing-whitespace convention used in our parsers, but it shows the same broader idea: whitespace handling can be packaged into a reusable combinator instead of repeated throughout the grammar parser.

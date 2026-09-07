@@ -198,7 +198,7 @@ type Value
 
 ZERO now has two kinds of values: numbers and Booleans.
 
-The distinction between Elm’s `Bool` type and the `VBool` constructor is important. `VBool` marks the result as a Boolean belonging to the language we're interpreting, while the enclosed Elm `Bool` stores whether that value is `True` or `False`.
+The distinction between Elm's `Bool` type and the `VBool` constructor is important. `VBool` marks the result as a Boolean belonging to the language we're interpreting, while the enclosed Elm `Bool` stores whether that value is `True` or `False`.
 
 For example:
 
@@ -275,9 +275,9 @@ typeOf value =
 
 Despite its name, `Type` isn't part of a static type checker. It simply classifies a value that has already been produced during evaluation so that we can describe a runtime error.
 
-Elm checks the code implementing our interpreter, not whether a ZERO expression uses values correctly. From Elm’s perspective, the nested `Zero` expressions are valid `Expr` values. Enforcing ZERO’s rule that `zero?` accepts only numbers is the evaluator’s responsibility.
+Elm checks the code implementing our interpreter, not whether a ZERO expression uses values correctly. From Elm's perspective, the nested `Zero` expressions are valid `Expr` values. Enforcing ZERO's rule that `zero?` accepts only numbers is the evaluator's responsibility.
 
-The interpreter’s public error type must also distinguish errors found while parsing from errors found while evaluating:
+The interpreter's public error type must also distinguish errors found while parsing from errors found while evaluating:
 
 ```elm
 type Error
@@ -513,4 +513,4 @@ Our next interpreter, [IF](/posts/if), will add conditional expressions. That in
 
 Before we build IF, think through what using Boolean values to choose between expressions might require us to change. How might the grammar, AST, parser, evaluator, and tests need to evolve?
 
-We’ll answer those questions when we build IF.
+We'll answer those questions when we build IF.

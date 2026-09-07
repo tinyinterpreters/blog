@@ -8,7 +8,7 @@ tags:
   - elm
 ---
 
-In [VAR](/posts/var), we gave our programs the ability to refer to values by name. But those names came from the interpreter’s initial environment. Programs couldn’t introduce names of their own.
+In [VAR](/posts/var), we gave our programs the ability to refer to values by name. But those names came from the interpreter's initial environment. Programs couldn't introduce names of their own.
 
 We'll add that ability with `let` expressions:
 

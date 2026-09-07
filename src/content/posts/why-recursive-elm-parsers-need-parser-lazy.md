@@ -112,7 +112,7 @@ It's a cycle among the parser values themselves.
 
 ## Following the dependency cycle
 
-Let’s follow the definitions.
+Let's follow the definitions.
 
 `expr` includes `diffExpr` as one of its alternatives, so `expr` depends on `diffExpr`.
 
@@ -190,7 +190,7 @@ P.lazy (\_ -> expr)
 
 gives us the `Parser Expr` required by `|=`.
 
-Now let’s see when `P.lazy` calls the thunk.
+Now let's see when `P.lazy` calls the thunk.
 
 ## When does `P.lazy` call the thunk?
 

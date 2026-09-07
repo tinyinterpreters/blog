@@ -32,7 +32,7 @@ Let's try the alternative and see what changes.
 
 ## Why `zero?(zero?(0))` is valid syntax in ZERO
 
-ZERO’s grammar treats constants, differences, and `zero?` expressions as three alternatives of the same syntactic category:
+ZERO's grammar treats constants, differences, and `zero?` expressions as three alternatives of the same syntactic category:
 
 ```txt
 Expr ::= Const
@@ -59,7 +59,7 @@ is itself an `Expr`, which means it can appear in the `Expr` position required b
 
 With this grammar, the parser only establishes that the operand is an expression. Evaluation later discovers that the inner expression produces a Boolean where the outer `zero?` expects a number.
 
-That’s why the published ZERO interpreter reports a runtime type error.
+That's why the published ZERO interpreter reports a runtime type error.
 
 But `Expr` is our design choice. We could make the operand category more specific.
 
@@ -74,7 +74,7 @@ BExpr
 
 `NExpr` is the syntactic category for expressions that produce numbers, while `BExpr` is the syntactic category for expressions that produce Booleans.
 
-ZERO’s grammar can then become:
+ZERO's grammar can then become:
 
 ```txt
 Program ::= Expr
@@ -107,7 +107,7 @@ Zero ::= 'zero?' '(' NExpr ')'
 
 Its operand must be a numeric expression too.
 
-Now let’s reconsider:
+Now let's reconsider:
 
 ```txt
 zero?(zero?(0))
@@ -220,13 +220,13 @@ For this version of ZERO, those operand mismatches can no longer reach evaluatio
 
 ## We changed more than the implementation
 
-There’s an important difference between the two designs.
+There's an important difference between the two designs.
 
 In the published ZERO language, `zero?(zero?(0))` is a syntactically valid program. Parsing succeeds, but evaluation eventually discovers that the inner `zero?` produces a Boolean where the outer `zero?` expects a number. The interpreter reports a runtime type error.
 
 In the experimental language, the same source text is not a syntactically valid program at all. The grammar prevents it from reaching evaluation.
 
-So we haven’t merely changed when the interpreter discovers the problem. We have changed how the language classifies it:
+So we haven't merely changed when the interpreter discovers the problem. We have changed how the language classifies it:
 
 ```txt
 published ZERO
@@ -236,13 +236,13 @@ experimental ZERO
 invalid syntax → syntax error
 ```
 
-We haven’t merely found a cleverer implementation of the same language. We have changed what counts as a valid program.
+We haven't merely found a cleverer implementation of the same language. We have changed what counts as a valid program.
 
-That’s a language-design decision.
+That's a language-design decision.
 
 The experimental design gives us stronger guarantees and a simpler evaluator, so the obvious question is:
 
-> Why didn’t I build ZERO this way?
+> Why didn't I build ZERO this way?
 
 ## Why parsing and type checking are often separate
 
@@ -321,7 +321,7 @@ But as type information begins to depend on variables, branches, functions, and 
 
 ## How GADTs encode the expression type
 
-There’s another way to express the same idea as our experimental AST.
+There's another way to express the same idea as our experimental AST.
 
 In Elm, we created separate types for numeric and Boolean expressions:
 
@@ -373,7 +373,7 @@ runExpr :: Expr a -> a
 
 An `Expr Int` evaluates to an `Int`, while an `Expr Bool` evaluates to a `Bool`. The result type is encoded directly in the type of the AST.
 
-That’s essentially the same guarantee we obtained in Elm by separating `NExpr` and `BExpr`, but GADTs let us express both categories through one parameterized `Expr` type.
+That's essentially the same guarantee we obtained in Elm by separating `NExpr` and `BExpr`, but GADTs let us express both categories through one parameterized `Expr` type.
 
 GADTs solve the AST representation problem here; they do not make the parsing problem disappear.
 
@@ -401,7 +401,7 @@ The published interpreter lets us follow that program through parsing and into e
 
 The experimental design prevents us from reaching that point. It gives us stronger guarantees, but it removes the very runtime behavior ZERO was intended to introduce.
 
-That’s why I kept the broader grammar in the published version.
+That's why I kept the broader grammar in the published version.
 
 The experiment still reveals something important about the original claim:
 
