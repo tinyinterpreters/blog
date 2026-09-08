@@ -13,13 +13,17 @@
     flake-utils.lib.eachDefaultSystem(system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        blog = pkgs.callPackage ./nix/blog.nix {};
+
+        deployBlog = pkgs.writeShellScript "deploy-blog" ''
+          ${deploy.packages.${system}.default}/bin/deploy "$@" ${blog} release/prod
+        '';
       in
       {
         devShells.default = pkgs.mkShell {
           name = "blog";
 
           packages = [
-            deploy.packages.${system}.deploy
             pkgs.nodejs-slim_24
             pkgs.pnpm
           ];
@@ -33,22 +37,36 @@
               pnpm install --silent
             fi
 
-            deploy-prod () {
-              #
-              # N.B. You MUST build the website before attempting to deploy.
-              #
-              deploy "$@" "$PROJECT_ROOT/dist" release/prod
-            }
+            alias d='pnpm dev'
+            alias b='pnpm build'
+            alias p='pnpm preview'
 
             clean () {
               rm -rf "$PROJECT_ROOT/"{.astro,dist,node_modules,public/pagefind}
             }
             alias c='clean'
 
-            alias d='pnpm dev'
-            alias b='pnpm build'
-            alias p='pnpm preview'
+            deploy-prod () {
+              nix run .#deploy
+            }
           '';
+        };
+
+        packages = {
+          inherit blog;
+          default = blog;
+        };
+
+        apps = {
+          deploy = {
+            type = "app";
+            program = "${deployBlog}";
+            meta.description = "Deploy the blog";
+          };
+        };
+
+        checks = {
+          inherit blog deployBlog;
         };
       }
     );

@@ -10,7 +10,7 @@ b # Build the website and write it to disk
 p # Preview the build locally
 c # Remove development and build artifacts
 
-deploy-prod # Deploy the website
+deploy-prod # Deploy the blog
 ```
 
 ## Tech Stack

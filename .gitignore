@@ -2,6 +2,7 @@
 dist/
 node_modules/
 public/pagefind
+result
 
 .pnpm-store
 pnpm-debug.log*

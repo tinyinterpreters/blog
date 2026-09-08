@@ -75,11 +75,83 @@ export default defineConfig({
     {
       name: "Google Sans Code",
       cssVariable: "--font-google-sans-code",
-      provider: fontProviders.google(),
+      provider: fontProviders.local(),
       fallbacks: ["monospace"],
-      weights: [300, 400, 500, 600, 700],
-      styles: ["normal", "italic"],
-      formats: ["woff", "ttf"],
+      subsets: ["latin"],
+      options: {
+        variants: [
+          {
+            weight: 300,
+            style: "normal",
+            src: [
+              "@fontsource/google-sans-code/files/google-sans-code-latin-300-normal.woff",
+            ],
+          },
+          {
+            weight: 400,
+            style: "normal",
+            src: [
+              "@fontsource/google-sans-code/files/google-sans-code-latin-400-normal.woff",
+            ],
+          },
+          {
+            weight: 500,
+            style: "normal",
+            src: [
+              "@fontsource/google-sans-code/files/google-sans-code-latin-500-normal.woff",
+            ],
+          },
+          {
+            weight: 600,
+            style: "normal",
+            src: [
+              "@fontsource/google-sans-code/files/google-sans-code-latin-600-normal.woff",
+            ],
+          },
+          {
+            weight: 700,
+            style: "normal",
+            src: [
+              "@fontsource/google-sans-code/files/google-sans-code-latin-700-normal.woff",
+            ],
+          },
+          {
+            weight: 300,
+            style: "italic",
+            src: [
+              "@fontsource/google-sans-code/files/google-sans-code-latin-300-italic.woff",
+            ],
+          },
+          {
+            weight: 400,
+            style: "italic",
+            src: [
+              "@fontsource/google-sans-code/files/google-sans-code-latin-400-italic.woff",
+            ],
+          },
+          {
+            weight: 500,
+            style: "italic",
+            src: [
+              "@fontsource/google-sans-code/files/google-sans-code-latin-500-italic.woff",
+            ],
+          },
+          {
+            weight: 600,
+            style: "italic",
+            src: [
+              "@fontsource/google-sans-code/files/google-sans-code-latin-600-italic.woff",
+            ],
+          },
+          {
+            weight: 700,
+            style: "italic",
+            src: [
+              "@fontsource/google-sans-code/files/google-sans-code-latin-700-italic.woff",
+            ],
+          },
+        ],
+      },
     },
   ],
   env: {
