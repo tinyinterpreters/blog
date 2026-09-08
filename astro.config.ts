@@ -67,6 +67,9 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      chunkSizeWarningLimit: 700,
+    },
   },
   fonts: [
     {
