@@ -1,3 +1,5 @@
 allowBuilds:
   esbuild: true
   sharp: true
+overrides:
+  "satori>fflate": "0.7.5"
