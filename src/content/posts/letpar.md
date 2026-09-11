@@ -77,12 +77,12 @@ runExpr expr env =
     case expr of
         -- ...
 
-    Let bindings body ->
-        evalBindings bindings env env
-            |> Result.andThen
-                (\bodyEnv ->
-                    runExpr body bodyEnv
-                )
+        Let bindings body ->
+            evalBindings bindings env env
+                |> Result.andThen
+                    (\bodyEnv ->
+                        runExpr body bodyEnv
+                    )
 
 
 evalBindings : List Binding -> Env -> Env -> Result RuntimeError Env

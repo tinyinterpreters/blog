@@ -125,12 +125,17 @@ Each binding becomes available to the initializer expressions that follow it and
 The implementation is slightly simpler than LETPAR:
 
 ```elm
-Let bindings body ->
-    evalBindings bindings env
-        |> Result.andThen
-            (\bodyEnv ->
-                runExpr body bodyEnv
-            )
+runExpr : Expr -> Env -> Result RuntimeError Value
+runExpr expr env =
+    case expr of
+        -- ...
+
+        Let bindings body ->
+            evalBindings bindings env
+                |> Result.andThen
+                    (\bodyEnv ->
+                        runExpr body bodyEnv
+                    )
 
 
 evalBindings : List Binding -> Env -> Result RuntimeError Env
