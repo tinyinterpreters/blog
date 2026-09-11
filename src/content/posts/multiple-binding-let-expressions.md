@@ -1,7 +1,7 @@
 ---
 title: "Multiple-Binding let Expressions - Syntax Before Semantics"
 description: Extend a tiny Elm interpreter with multiple-binding let expressions, then explore the semantic choices that lead to parallel and sequential bindings.
-pubDatetime: 2026-09-10T01:10:00
+pubDatetime: 2026-09-08T09:00:00
 tags:
   - interpreters
   - programming languages
@@ -372,6 +372,6 @@ The syntax and AST are identical. What changes is the meaning we assign to the b
 
 ## Where we go next
 
-Next, we'll implement LETPAR and see how parallel binding semantics shape the evaluator.
+Next, we'll implement [LETPAR](/posts/letpar) and see how parallel binding semantics shape the evaluator.
 
-Then we'll return to the same syntax and AST for LETSEQ and see how one change in meaning leads to a different evaluation strategy.
+Then we'll return to the same syntax and AST for [LETSEQ](/posts/letseq) and see how one change in meaning leads to a different evaluation strategy.
