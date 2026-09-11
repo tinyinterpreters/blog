@@ -42,7 +42,7 @@
             alias p='pnpm preview'
 
             clean () {
-              rm -rf "$PROJECT_ROOT/"{.astro,dist,node_modules,public/pagefind}
+              rm -rf "$PROJECT_ROOT/"{.astro,dist,node_modules,public/pagefind,result}
             }
             alias c='clean'
 
