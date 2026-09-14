@@ -1,6 +1,6 @@
 ---
 title: "LETDEP: Dependency-Ordered Binding Semantics for let Expressions"
-description: Define LETDEP, resolve forward references with dependency analysis and topological sorting, and explore the lexical-scope edge cases that make it interesting.
+description: Define LETDEP precisely, resolve forward references with dependency analysis and topological sorting, and explore the lexical-scope edge cases that make it interesting.
 pubDatetime: 2026-09-11T09:00:00
 tags:
   - interpreters
