@@ -1,14 +1,14 @@
 ---
-title: "DIFF: Adding Recursive Expressions to a Tiny Interpreter in Elm"
-description: Add recursive difference expressions to a tiny Elm interpreter and see how recursion shapes the grammar, AST, parser with lazy, and evaluator.
+title: "DIFF: When Expressions Contain Expressions"
+description: DIFF extends CONST with difference expressions whose operands are themselves expressions, revealing the same recursive structure in the grammar, AST, parser, and evaluator.
 pubDatetime: 2026-08-10T09:00:00
 tags:
-  - interpreters
-  - parser combinators
+  - recursion
+  - parsing
   - elm
 ---
 
-In [CONST](/posts/const), we built a minimal interpreter that evaluates programs consisting of a single non-negative integer literal. It takes a program like `123` through the complete interpreter pipeline: `123 → Program (Const 123) → VNumber 123`.
+In [CONST](/posts/const/), we built a minimal interpreter that evaluates programs consisting of a single non-negative integer literal. It takes a program like `123` through the complete interpreter pipeline: `123 → Program (Const 123) → VNumber 123`.
 
 DIFF extends that interpreter with difference expressions:
 
@@ -478,7 +478,7 @@ VNumber 3
 
 The parser tests document which source programs DIFF accepts and which ASTs they produce.
 
-These tests use the `testValue` helper we developed in [Testing an Elm Interpreter with elm-test](/posts/testing-an-elm-interpreter-with-elm-test).
+These tests use the `testValue` helper we developed in [Testing an Elm Interpreter with elm-test](/posts/testing-an-elm-interpreter-with-elm-test/).
 
 We keep a constant expression to confirm that constant expressions inherited from CONST still work, then add examples of basic and nested difference expressions:
 
@@ -619,7 +619,7 @@ The new syntax is small, but the change is structural. A difference expression c
 
 ## Where we go next
 
-Our next interpreter, [ZERO](/posts/zero), will introduce a second kind of value: Booleans.
+Our next interpreter, [ZERO](/posts/zero/), will introduce a second kind of value: Booleans.
 
 Before we build ZERO, think through what introducing Booleans might require us to change. How might the grammar, lexer, AST, parser, evaluator, and tests need to evolve?
 
