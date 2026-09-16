@@ -1,14 +1,14 @@
 ---
-title: "IF: Adding Conditional Expressions to a Tiny Interpreter in Elm"
-description: Add conditional expressions to a tiny Elm interpreter and see how Boolean conditions introduce control flow by selecting which branch gets evaluated.
+title: "IF: Conditional Expressions and Selective Evaluation"
+description: IF extends ZERO with conditional expressions, using Boolean conditions to choose which of two branches to evaluate while leaving the other unevaluated.
 pubDatetime: 2026-08-24T06:40:00
 tags:
-  - interpreters
-  - programming languages
+  - conditionals
+  - control-flow
   - elm
 ---
 
-In [ZERO](/posts/zero), we gave our interpreter Boolean values but we couldn't do much with them. Conditional expressions change that by letting us use Boolean values to decide which expression the interpreter evaluates next:
+In [ZERO](/posts/zero/), we gave our interpreter Boolean values but we couldn't do much with them. Conditional expressions change that by letting us use Boolean values to decide which expression the interpreter evaluates next:
 
 ```txt
 if zero?(0) then 2 else 3
@@ -79,7 +79,7 @@ if 0 then 2 else 3
 
 This is syntactically valid because it follows the structure defined by the grammar. However, the grammar does not enforce that the condition evaluates to a Boolean value—it only specifies that an expression can appear in that position. Enforcing the requirement that the condition produces a Boolean is the responsibility of the evaluator.
 
-The new concrete syntax introduces the reserved words `if`, `then`, and `else`, but we don't need to change the lexer. We can recognize them using the existing `keyword` helper introduced in [ZERO](/posts/zero).
+The new concrete syntax introduces the reserved words `if`, `then`, and `else`, but we don't need to change the lexer. We can recognize them using the existing `keyword` helper introduced in [ZERO](/posts/zero/).
 
 ## Representing conditional expressions in the AST
 
@@ -171,7 +171,7 @@ ifExpr =
 
 The parser follows the grammar from left to right. It discards the `if`, `then`, and `else` keywords because they are not needed in the AST, and it keeps the three expressions required to construct `If`.
 
-Each reference to `expr` is wrapped in `P.lazy` because `expr` includes `ifExpr`, while `ifExpr` refers back to `expr`. This is the same recursive parser structure we first introduced in [DIFF: Adding Recursive Expressions to a Tiny Interpreter in Elm](/posts/diff), so IF gives us a chance to apply that idea again rather than introducing a new parsing technique.
+Each reference to `expr` is wrapped in `P.lazy` because `expr` includes `ifExpr`, while `ifExpr` refers back to `expr`. This is the same recursive parser structure we first introduced in [DIFF: Adding Recursive Expressions to a Tiny Interpreter in Elm](/posts/dif/f/), so IF gives us a chance to apply that idea again rather than introducing a new parsing technique.
 
 ## Evaluating the condition before choosing a branch
 
@@ -346,7 +346,7 @@ The final two tests verify that only the selected branch is evaluated. The first
 
 Our programs still cannot refer to values by name.
 
-Next, in [VAR](/posts/var), we'll add variable expressions. That will raise a new question for the interpreter:
+Next, in [VAR](/posts/var/), we'll add variable expressions. That will raise a new question for the interpreter:
 
 > When we encounter a variable, how do we find the value associated with its name?
 
