@@ -1,10 +1,10 @@
 ---
-title: "CONST: The Structure of a Tiny Interpreter in Elm"
-description: Build a tiny but complete interpreter in Elm and follow a program from source text through parsing and an AST to its evaluated result.
+title: "CONST: From Source Text to Value"
+description: CONST is a tiny Elm interpreter for non-negative integer constants, showing the path from source text through an AST to an evaluated value.
 pubDatetime: 2026-08-03T05:00:00
 tags:
-  - interpreters
-  - programming languages
+  - ast
+  - parsing
   - elm
 ---
 
@@ -169,7 +169,7 @@ The grammar tells us what the lexer needs to recognize, what program structure t
 
 ## The lexer
 
-In this project, the lexer consists of small parsers that recognize the basic pieces of source text used by the language. We use the [`elm/parser`](https://package.elm-lang.org/packages/elm/parser/latest/) package to implement both these lexical parsers and the parser for complete programs.
+In this project, the lexer consists of small parsers that recognize the basic pieces of source text used by the language. We use the [`elm/parser`](https://package.elm-lang.org/packages/elm/parser/latest) package to implement both these lexical parsers and the parser for complete programs.
 
 For CONST, the basic pieces of source text are non-negative integer literals and spaces. In many lexer–parser designs, the parser requests tokens from a separate lexer. Here, the lexical parsers are composed directly into the parser instead.
 
@@ -618,6 +618,6 @@ The complete path from source text to result is now in place. Future interpreter
 
 ## Where we go next
 
-Next, we'll build [DIFF](/posts/diff), which introduces difference expressions.
+Next, we'll build [DIFF](/posts/diff/), which introduces difference expressions.
 
 Adding them requires the grammar, AST, parser, and evaluator to handle expressions nested inside expressions. I'll show you how to make those changes while preserving the overall pipeline we established here.
