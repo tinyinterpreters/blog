@@ -1,14 +1,14 @@
 ---
 title: "LETDEP: Dependency-Ordered Binding Semantics for let Expressions"
-description: Define LETDEP precisely, resolve forward references with dependency analysis and topological sorting, and explore the lexical-scope edge cases that make it interesting.
+description: "LETDEP gives multiple-binding let expressions dependency-ordered binding semantics: initializer dependencies determine the evaluation order, allowing forward references while rejecting duplicate names and cyclic bindings."
 pubDatetime: 2026-09-11T09:00:00
 tags:
-  - interpreters
-  - programming languages
+  - bindings
+  - static-analysis
   - elm
 ---
 
-When I started exploring multiple-binding `let` expressions, I planned to stop with two variations: LETPAR and LETSEQ.
+When I started exploring multiple-binding `let` expressions, I planned to stop with the two variations: [LETPAR](/posts/letpar/) and [LETSEQ](/posts/letseq/).
 
 LETPAR gave us parallel binding semantics. LETSEQ gave us sequential binding semantics.
 
@@ -37,8 +37,11 @@ The bindings may refer to one another in either direction, provided those depend
 So our example can be understood as:
 
 ```txt
-b = 1
-a = b
+let
+    b = 1
+    a = b
+in
+a
 ```
 
 even though that is not the order in which the bindings were written.
@@ -277,16 +280,16 @@ If you get stuck, or just want to compare approaches, these are the parts of my 
 
 ### Functions
 
-- [`DirectedGraph.tsort`](https://github.com/tinyinterpreters/let/blob/a5647522d51d65f8d89ab1993b5456a82a0b5d6b/src/DirectedGraph.elm#L59-L123) — performs the topological sort and detects cyclic dependency graphs.
-- [`LET.AST.freeVariables`](https://github.com/tinyinterpreters/let/blob/a5647522d51d65f8d89ab1993b5456a82a0b5d6b/src/LET/AST.elm#L38-L91) — determines which names are free in an expression while respecting nested `let` scopes and self-references.
-- [`LET.Interpreter.resolveDependencies`](https://github.com/tinyinterpreters/let/blob/a5647522d51d65f8d89ab1993b5456a82a0b5d6b/src/LET/Interpreter.elm#L203-L273) — the entry point for transforming a program so its bindings appear in a valid dependency order.
-- [`LET.Interpreter.sort`](https://github.com/tinyinterpreters/let/blob/a5647522d51d65f8d89ab1993b5456a82a0b5d6b/src/LET/Interpreter.elm#L276-L340) — determines the dependencies within a binding group and produces a valid ordering or a static error.
+- [`DirectedGraph.tsort`](https://github.com/tinyinterpreters/let/tree/e603e8d1841ce73a5da1493711e64dace3e44f88/src/DirectedGraph.elm#L59-L123) — performs the topological sort and detects cyclic dependency graphs.
+- [`LET.AST.freeVariables`](https://github.com/tinyinterpreters/let/tree/e603e8d1841ce73a5da1493711e64dace3e44f88/src/LET/AST.elm#L38-L91) — determines which names are free in an expression while respecting nested `let` scopes and self-references.
+- [`LET.Interpreter.resolveDependencies`](https://github.com/tinyinterpreters/let/tree/e603e8d1841ce73a5da1493711e64dace3e44f88/src/LET/Interpreter.elm#L203-L273) — the entry point for transforming a program so its bindings appear in a valid dependency order.
+- [`LET.Interpreter.sort`](https://github.com/tinyinterpreters/let/tree/e603e8d1841ce73a5da1493711e64dace3e44f88/src/LET/Interpreter.elm#L276-L340) — determines the dependencies within a binding group and produces a valid ordering or a static error.
 
 ### Test modules
 
-- [`Test.DirectedGraph`](https://github.com/tinyinterpreters/let/blob/a5647522d51d65f8d89ab1993b5456a82a0b5d6b/tests/Test/DirectedGraph.elm) — tests topological sorting and cycle detection independently from the interpreter.
-- [`Test.LET.AST`](https://github.com/tinyinterpreters/let/blob/a5647522d51d65f8d89ab1993b5456a82a0b5d6b/tests/Test/LET/AST.elm) — tests free-variable analysis, including nested scopes and self-reference edge cases.
-- [`Test.LET.Interpreter`](https://github.com/tinyinterpreters/let/blob/a5647522d51d65f8d89ab1993b5456a82a0b5d6b/tests/Test/LET/Interpreter.elm#L215-L329) — tests the LETDEP semantics, including forward references, duplicate bindings, cycles, nested `let` expressions, and self-reference edge cases.
+- [`Test.DirectedGraph`](https://github.com/tinyinterpreters/let/tree/e603e8d1841ce73a5da1493711e64dace3e44f88/tests/Test/DirectedGraph.elm) — tests topological sorting and cycle detection independently from the interpreter.
+- [`Test.LET.AST`](https://github.com/tinyinterpreters/let/tree/e603e8d1841ce73a5da1493711e64dace3e44f88/tests/Test/LET/AST.elm) — tests free-variable analysis, including nested scopes and self-reference edge cases.
+- [`Test.LET.Interpreter`](https://github.com/tinyinterpreters/let/tree/e603e8d1841ce73a5da1493711e64dace3e44f88/tests/Test/LET/Interpreter.elm#L215-L329) — tests the LETDEP semantics, including forward references, duplicate bindings, cycles, nested `let` expressions, and self-reference edge cases.
 
 Once you can make all the tests pass, you know your implementation handles the semantics we have defined here.
 
