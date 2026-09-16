@@ -1,10 +1,10 @@
 ---
-title: "VAR: Adding Variables and Environments to a Tiny Interpreter in Elm"
-description: Add variable expressions and environments to a tiny interpreter in Elm, then see how variable lookup makes evaluation depend on context.
+title: "VAR: Variables and Environments"
+description: VAR extends IF with variable expressions and environments, making evaluation depend on context as variable names are looked up in the current environment.
 pubDatetime: 2026-08-31T11:55:00
 tags:
-  - interpreters
-  - programming languages
+  - variables
+  - environments
   - elm
 ---
 
@@ -64,7 +64,7 @@ Programs will not yet be able to introduce new names themselves. That limitation
 
 ## Extending the language with variable expressions
 
-VAR supports everything [IF](/posts/if) supports and adds variable expressions.
+VAR supports everything [IF](/posts/if/) supports and adds variable expressions.
 
 We extend the grammar with:
 
@@ -265,7 +265,7 @@ runExpr expr env =
                     Err <| IdentifierNotFound name
 ```
 
-We add `IdentifierNotFound` to the runtime error type we introduced in [ZERO](/posts/zero):
+We add `IdentifierNotFound` to the runtime error type we introduced in [ZERO](/posts/zero/):
 
 ```elm
 type RuntimeError
@@ -420,7 +420,7 @@ VAR also adds another way evaluation can fail. An identifier can be syntacticall
 
 VAR lets programs refer to names, but they still cannot introduce names of their own.
 
-Next, in [LET](https://blog.tinyinterpreters.dev/posts/let), we'll add `let` expressions so programs can create their own bindings. That gives us a few choices to make:
+Next, in [LET](/posts/let/), we'll add `let` expressions so programs can create their own bindings. That gives us a few choices to make:
 
 - Which expressions should be able to use a new binding?
 - What should happen if the same name is already bound?
