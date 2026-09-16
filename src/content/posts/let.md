@@ -1,6 +1,6 @@
 ---
-title: "LET: Adding Local Bindings to a Tiny Interpreter in Elm"
-description: Add let expressions to a tiny interpreter in Elm and explore local bindings, scope, variable shadowing, and evaluation order through examples and tests.
+title: "LET: Introducing Local Bindings and Scope"
+description: LET extends VAR with let expressions, allowing programs to introduce local bindings and showing how environments determine their scope and support shadowing.
 pubDatetime: 2026-09-07T12:30:00
 tags:
   - interpreters
@@ -8,7 +8,7 @@ tags:
   - elm
 ---
 
-In [VAR](/posts/var), we gave our programs the ability to refer to values by name. But those names came from the interpreter's initial environment. Programs couldn't introduce names of their own.
+In [VAR](/posts/var/), we gave our programs the ability to refer to values by name. But those names came from the interpreter's initial environment. Programs couldn't introduce names of their own.
 
 We'll add that ability with `let` expressions:
 
@@ -416,7 +416,7 @@ let a = missing in 42
 
 With no binding for `missing` in the current environment, this program fails with an identifier-not-found error. The body does not use `a`, but our rule still requires the bound expression to be evaluated first.
 
-In [IF](/posts/if), we chose to evaluate only the selected branch. For LET, we choose to evaluate the bound expression before the body.
+In [IF](/posts/if/), we chose to evaluate only the selected branch. For LET, we choose to evaluate the bound expression before the body.
 
 Here are the results of all seven examples together:
 
@@ -456,9 +456,9 @@ You can find the [complete source code for LET, including the tests, on GitHub](
 
 Our programs can now introduce local bindings and use them to name intermediate results.
 
-Next, in PROC, we'll add functions. That gives us several language-design questions to consider:
+Next, in PROC, we'll add procedures. That gives us several language-design questions to consider:
 
-- Should we allow variables to be bound to functions?
-- Should we allow functions to be passed as arguments to other functions?
-- Should we allow functions to be returned from other functions?
-- When a function's body refers to a name defined outside the function, where should we look up its value?
+- Should we allow variables to be bound to procedures?
+- Should we allow procedures to be passed as arguments to other procedures?
+- Should we allow procedures to be returned from other procedures?
+- When a procedure's body refers to a name defined outside the procedure, where should we look up its value?
