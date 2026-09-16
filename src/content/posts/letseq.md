@@ -1,14 +1,14 @@
 ---
 title: "LETSEQ: Sequential Binding Semantics for let Expressions"
-description: Define LETSEQ precisely, implement sequential binding semantics in Elm, test the interesting edge cases, and compare similar forms in Racket and Clojure.
+description: "LETSEQ gives multiple-binding let expressions sequential binding semantics: bindings are evaluated in source order, with each new binding becoming available to the ones that follow it."
 pubDatetime: 2026-09-10T09:00:00
 tags:
-  - interpreters
-  - programming languages
+  - bindings
+  - semantics
   - elm
 ---
 
-In [LETPAR: Parallel Binding Semantics for `let` Expressions](/posts/letpar), every initializer expression was evaluated in the environment that existed before the `let` expression.
+In [LETPAR: Parallel Binding Semantics for `let` Expressions](/posts/letpar/), every initializer expression was evaluated in the environment that existed before the `let` expression.
 
 LETSEQ makes a different choice: each binding becomes available before the next initializer expression is evaluated.
 
