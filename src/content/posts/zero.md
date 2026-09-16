@@ -1,14 +1,14 @@
 ---
-title: "ZERO: Adding Booleans and Runtime Type Errors to a Tiny Interpreter in Elm"
-description: Add the zero? predicate to a tiny Elm interpreter and see how Boolean values introduce runtime type errors, type checks, and fallible evaluation with Result.
+title: "ZERO: Boolean Values and Runtime Type Errors"
+description: ZERO extends DIFF with the zero? predicate and Boolean values, then introduces runtime type errors for expressions that use values of the wrong type.
 pubDatetime: 2026-08-17T07:40:00
 tags:
-  - interpreters
-  - programming languages
+  - booleans
+  - runtime-errors
   - elm
 ---
 
-In [CONST](/posts/const) and [DIFF](/posts/diff), every expression evaluated to a number. ZERO breaks that assumption by adding the `zero?` predicate:
+In [CONST](/posts/const/) and [DIFF](/posts/diff/), every expression evaluated to a number. ZERO breaks that assumption by adding the `zero?` predicate:
 
 ```txt
 zero?(expression)
@@ -175,7 +175,7 @@ zeroExpr =
         |. L.symbol ")"
 ```
 
-The operand is another expression, so we use `P.lazy` just as we did for the operands of a difference expression. If you want a closer look at why recursive Elm parsers need this, see [Why Recursive Elm Parsers Need `Parser.lazy`](/posts/why-recursive-elm-parsers-need-parser-lazy).
+The operand is another expression, so we use `P.lazy` just as we did for the operands of a difference expression. If you want a closer look at why recursive Elm parsers need this, see [Why Recursive Elm Parsers Need `Parser.lazy`](/posts/why-recursive-elm-parsers-need-parser-lazy/).
 
 This allows `zero?` to contain constants, difference expressions, or another `zero?` expression.
 
@@ -448,7 +448,7 @@ If the value isn't a number, `evalZero` returns a type error describing what `ze
 
 A test that checks only whether a program fails is no longer precise enough.
 
-In [Testing an Elm Interpreter with elm-test](/posts/testing-an-elm-interpreter-with-elm-test), `Nothing` was enough to mean that we expected some error. At the time, the interpreter could only fail while parsing. ZERO introduces another possibility: parsing can succeed and evaluation can fail.
+In [Testing an Elm Interpreter with elm-test](/posts/te/sting-an-elm-interpreter-with-elm-test/), `Nothing` was enough to mean that we expected some error. At the time, the interpreter could only fail while parsing. ZERO introduces another possibility: parsing can succeed and evaluation can fail.
 
 Consider:
 
@@ -507,7 +507,7 @@ The `testRun` helper compares the actual result with the corresponding `Expected
 
 Our interpreter can now produce Boolean values, but no expression can use one successfully. A Boolean can be the final result of a program, but it can't yet influence which expression is evaluated next.
 
-Our next interpreter, [IF](/posts/if), will add conditional expressions. That introduces a new question about evaluation:
+Our next interpreter, [IF](/posts/if/), will add conditional expressions. That introduces a new question about evaluation:
 
 > After evaluating the condition, should we evaluate both branches and then choose a result, or evaluate only the selected branch?
 
