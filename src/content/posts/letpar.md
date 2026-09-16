@@ -1,14 +1,14 @@
 ---
 title: "LETPAR: Parallel Binding Semantics for let Expressions"
-description: Define LETPAR precisely, implement parallel binding semantics in Elm, test the interesting edge cases, and compare similar forms in Racket and OCaml.
+description: "LETPAR gives multiple-binding let expressions parallel binding semantics: every initializer is evaluated in the incoming environment, so sibling bindings cannot see one another."
 pubDatetime: 2026-09-09T09:00:00
 tags:
-  - interpreters
-  - programming languages
+  - bindings
+  - semantics
   - elm
 ---
 
-In [Multiple-Binding `let` Expressions: Syntax Before Semantics](/posts/multiple-binding-let-expressions), we added support for multiple bindings but deliberately stopped before deciding what they should mean.
+In [Multiple-Binding `let` Expressions: Syntax Before Semantics](/posts/multiple-binding-let-expressions/), we added support for multiple bindings but deliberately stopped before deciding what they should mean.
 
 Now we'll implement one of the meanings we identified there: **LETPAR**, with parallel binding semantics.
 
