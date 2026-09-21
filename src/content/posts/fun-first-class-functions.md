@@ -1,7 +1,7 @@
 ---
 title: "FUN: First-Class Functions, Currying, and a Surprise"
 description: Extend LET with first-class functions, then use currying and partial application to uncover an unexpected consequence of how function calls are evaluated.
-pubDatetime: 2026-09-21T02:30:00
+pubDatetime: 2026-09-21T14:30:00
 tags:
   - first-class functions
   - currying
