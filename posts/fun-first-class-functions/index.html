@@ -1,0 +1,783 @@
+<!DOCTYPE html><html dir="ltr" lang="en" class="overflow-y-scroll scroll-smooth"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><link rel="canonical" href="https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/"><meta name="generator" content="Astro v7.3.1"><!-- Font --><style>@font-face{font-family:"Google Sans Code-4f5b9501634e7633";src:url("/_astro/fonts/871674400aa6a0d4.woff") format("woff");font-display:swap;font-weight:300;font-style:normal;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633";src:url("/_astro/fonts/17535a9d65c869e7.woff") format("woff");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633";src:url("/_astro/fonts/131a99ad6fa5d80d.woff") format("woff");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633";src:url("/_astro/fonts/2b0eca090098a570.woff") format("woff");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633";src:url("/_astro/fonts/d474ad222d3adf56.woff") format("woff");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633";src:url("/_astro/fonts/ed0c2040558a02d5.woff") format("woff");font-display:swap;font-weight:300;font-style:italic;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633";src:url("/_astro/fonts/f193ec09783a4f59.woff") format("woff");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633";src:url("/_astro/fonts/f13578f3c788852e.woff") format("woff");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633";src:url("/_astro/fonts/3e815016145005b8.woff") format("woff");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633";src:url("/_astro/fonts/bcfb50c80a309d51.woff") format("woff");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:300;font-style:normal;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:400;font-style:normal;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:500;font-style:normal;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:600;font-style:normal;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:700;font-style:normal;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:300;font-style:italic;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:400;font-style:italic;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:500;font-style:italic;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:600;font-style:italic;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}@font-face{font-family:"Google Sans Code-4f5b9501634e7633 fallback: Courier New";src:local("Courier New");font-display:swap;font-weight:700;font-style:italic;size-adjust:99.9837%;ascent-override:96.6157%;descent-override:28.6047%;}:root{--font-google-sans-code:"Google Sans Code-4f5b9501634e7633","Google Sans Code-4f5b9501634e7633 fallback: Courier New",monospace;}</style><!-- Primary meta --><title>FUN: First-Class Functions, Currying, and a Surprise | Tiny Interpreters</title><meta name="title" content="FUN: First-Class Functions, Currying, and a Surprise | Tiny Interpreters"><meta name="description" content="Extend LET with first-class functions, then use currying and partial application to uncover an unexpected consequence of how function calls are evaluated."><meta name="author" content="Dwayne Crooks"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Tiny Interpreters"><meta property="og:title" content="FUN: First-Class Functions, Currying, and a Surprise | Tiny Interpreters"><meta property="og:description" content="Extend LET with first-class functions, then use currying and partial application to uncover an unexpected consequence of how function calls are evaluated."><meta property="og:url" content="https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/"><meta property="og:image" content="https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/index.png"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/"><meta property="twitter:title" content="FUN: First-Class Functions, Currying, and a Surprise | Tiny Interpreters"><meta property="twitter:description" content="Extend LET with first-class functions, then use currying and partial application to uncover an unexpected consequence of how function calls are evaluated."><meta property="twitter:image" content="https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/index.png"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Tiny Interpreters" href="https://blog.tinyinterpreters.dev/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) --><meta property="og:type" content="article"><meta property="article:published_time" content="2026-09-21T02:30:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"FUN: First-Class Functions, Currying, and a Surprise | Tiny Interpreters","image":"https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/index.png","datePublished":"2026-09-21T02:30:00.000Z","author":[{"@type":"Person","name":"Dwayne Crooks","url":"https://elmwithdwayne.dev/"}]}</script><!-- Umami --><script defer src="https://cloud.umami.is/script.js" data-website-id="ed3db768-5d52-4329-ad57-e651c8aa02dc">
+    </script><!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        const root = document.firstElementChild;
+        root?.setAttribute("data-theme", theme);
+        root?.classList.toggle("dark", theme === "dark");
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CYDbzu1r.js"></script><link rel="stylesheet" href="/_astro/Footer.BfH4PgAi.css"><style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media (prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*),[data-astro-transition-scope]{animation:none!important}}
+</style><script type="module" src="/_astro/page.DShIlz5T.js"></script><style>[data-astro-transition-scope="astro-bztu2lml-1"] { view-transition-name: first-class-functions; }@layer astro { ::view-transition-old(first-class-functions) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(first-class-functions) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(first-class-functions) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(first-class-functions) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bztu2lml-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bztu2lml-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bztu2lml-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bztu2lml-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bztu2lml-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bztu2lml-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bztu2lml-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bztu2lml-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-bztu2lml-2"] { view-transition-name: currying; }@layer astro { ::view-transition-old(currying) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(currying) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(currying) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(currying) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bztu2lml-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bztu2lml-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bztu2lml-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bztu2lml-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bztu2lml-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bztu2lml-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bztu2lml-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bztu2lml-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-bztu2lml-3"] { view-transition-name: elm; }@layer astro { ::view-transition-old(elm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(elm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(elm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(elm) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bztu2lml-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bztu2lml-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bztu2lml-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bztu2lml-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bztu2lml-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bztu2lml-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bztu2lml-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bztu2lml-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head><body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"><a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4">Skip to content</a><header class="app-layout flex flex-col items-center justify-between sm:flex-row"><div class="border-border bg-background relative flex w-full items-baseline justify-between border-b py-4 sm:items-center sm:py-6"><a href="/" class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none">Tiny Interpreters</a><nav id="nav-menu" class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"><button id="menu-btn" class="focus-outline self-end p-2 sm:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="menu-items" data-label-open="Open menu" data-label-close="Close menu"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg></button><ul id="menu-items" class="[&amp;&gt;li&gt;a]:hover:text-accent mt-4 hidden w-44 grid-cols-2 place-content-center gap-2 sm:mt-0 sm:flex sm:w-auto sm:gap-x-5 sm:gap-y-0 sm:[&amp;&gt;li]:h-8 [&amp;&gt;li&gt;a]:block [&amp;&gt;li&gt;a]:px-4 [&amp;&gt;li&gt;a]:py-3 [&amp;&gt;li&gt;a]:text-center [&amp;&gt;li&gt;a]:font-medium sm:[&amp;&gt;li&gt;a]:px-2 sm:[&amp;&gt;li&gt;a]:py-1"><li class="col-span-2"><a href="/posts/" class="active-nav">Posts</a></li><li class="col-span-2"><a href="/tags/">Tags</a></li><li class="col-span-2"><a href="/about/">About</a></li><li class="col-span-2"><a href="/archives/" title="Archives" aria-label="Archives" class="group inline-flex items-center gap-1 hover:text-accent focus-outline flex size-full justify-center p-3 sm:relative sm:size-8 sm:p-0"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden sm:absolute sm:top-1/2 sm:left-1/2 sm:block sm:size-6 sm:-translate-x-1/2 sm:-translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8M10 12h4" /></svg><span class="sm:sr-only">Archives</span></a></li><li class="col-span-1 flex items-center justify-center"><a href="/search/" title="Search" aria-label="Search" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-8"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg><span class="sr-only">Search</span></a></li><li class="col-span-1 flex items-center justify-center"><button id="theme-btn" class="focus-outline hover:[&amp;&gt;svg]:stroke-accent relative size-12 p-4 sm:size-8" title="Toggle theme" aria-label="auto" aria-live="polite"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg></button></li></ul></nav></div></header><script type="module">function e(){let e=document.querySelector(`#menu-btn`),t=document.querySelector(`#menu-items`),n=document.querySelector(`#menu-icon`),r=document.querySelector(`#close-icon`);if(!e||!t||!n||!r)return;let i=e.dataset.labelOpen??`Open menu`,a=e.dataset.labelClose??`Close menu`;e.addEventListener(`click`,()=>{let o=e.getAttribute(`aria-expanded`)===`true`;e.setAttribute(`aria-expanded`,o?`false`:`true`),e.setAttribute(`aria-label`,o?i:a),t.classList.toggle(`hidden`),t.classList.toggle(`grid`),n.classList.toggle(`hidden`),r.classList.toggle(`hidden`)})}e(),document.addEventListener(`astro:after-swap`,e);</script><div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>Go back</span></a></div><script type="module">function e(){let e=document.querySelector(`#back-button`),t=sessionStorage.getItem(`backUrl`);t&&e&&(e.href=t)}document.addEventListener(`astro:page-load`,e),e();</script><main id="main-content" class="app-layout" data-pagefind-body><h1 style="view-transition-name:fun-first-class-functions-currying-and-a-surprise" class="text-accent inline-block text-2xl font-bold sm:text-3xl">FUN: First-Class Functions, Currying, and a Surprise</h1><div class="my-2 flex items-center gap-2"><div class="text-muted-foreground flex items-center gap-x-2"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg><time class="text-sm sm:text-base" datetime="2026-09-21T02:30:00.000Z">20 Sep, 2026</time></div><span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">|</span></div><article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"><p>Let’s have some FUN. 🤓</p>
+<p>FUN extends <a href="/posts/let/">LET</a> with first-class functions. That means our functions can be created as values, bound to names, passed as arguments, and returned as results.</p>
+<p>If you’re used to functional programming, all of that probably feels ordinary. We’re implementing these interpreters in Elm, after all. Functions are values in Elm too, where they enjoy first-class citizenship. FUN gives us a chance to see the small set of interpreter rules that make those familiar capabilities possible.</p>
+<h2 id="table-of-contents">Table of contents</h2>
+<p></p><details><summary>Open Table of contents</summary><p></p>
+<ul>
+<li><a href="#what-do-we-need-to-do-to-add-functions">What do we need to do to add functions?</a></li>
+<li><a href="#what-should-a-function-expression-mean">What should a function expression mean?</a></li>
+<li><a href="#what-should-a-function-call-mean">What should a function call mean?</a></li>
+<li><a href="#extending-the-grammar">Extending the grammar</a></li>
+<li><a href="#representing-functions-and-calls-in-the-ast">Representing functions and calls in the AST</a></li>
+<li><a href="#parsing-functions-and-calls">Parsing functions and calls</a></li>
+<li><a href="#representing-functions-as-values">Representing functions as values</a></li>
+<li><a href="#calling-a-function">Calling a function</a></li>
+<li><a href="#passing-functions-as-arguments">Passing functions as arguments</a></li>
+<li><a href="#returning-functions-as-results">Returning functions as results</a></li>
+<li><a href="#first-class-and-higher-order-functions">First-class and higher-order functions</a></li>
+<li><a href="#currying-and-partial-application">Currying and partial application</a></li>
+<li><a href="#hold-up-wait-a-minute-something-aint-right">Hold up, wait a minute, something ain’t right</a></li>
+<li><a href="#what-is-dynamic-scope">What is dynamic scope?</a></li>
+<li><a href="#how-did-lisp-end-up-here-too">How did Lisp end up here too?</a></li>
+<li><a href="#can-we-make-add-work-the-way-we-expected">Can we make <code>add</code> work the way we expected?</a></li>
+</ul>
+<p></p></details><p></p>
+<h2 id="what-do-we-need-to-do-to-add-functions">What do we need to do to add functions?</h2>
+<p>At a high level, adding functions requires two things.</p>
+<p>First, we need a way to <strong>create a function</strong>, using a function expression:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>fun (parameter) body</span></span></code></pre>
+<p>For example:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>fun (x) -(x, 1)</span></span></code></pre>
+<p>Here, <code>x</code> is the <strong>parameter</strong>, also called the <strong>formal parameter</strong>, and <code>-(x, 1)</code> is the <strong>body</strong>.</p>
+<p>Second, we need a way to <strong>call a function</strong>, using a call expression:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>(function argument)</span></span></code></pre>
+<p>For example:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>(decrement 333)</span></span></code></pre>
+<p>The first part is the <strong>function position</strong> and the second is the <strong>argument position</strong>. The function position can contain any expression that produces a function, while the argument position can contain any expression that produces the value we want to pass to it.</p>
+<p>That means the function position doesn’t have to be a name such as <code>decrement</code> and the argument position doesn’t have to contain a constant such as <code>333</code>:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>(fun (x) -(x, 1) -(456, 123))</span></span></code></pre>
+<p>The expression supplied in the argument position is the <strong>argument</strong>, also called the <strong>actual parameter</strong>.</p>
+<p>We’ll start with functions that take one argument. This keeps the language small while giving us the essential machinery for creating and calling functions.</p>
+<p>Now that we know how we’ll create and call them, we can decide what each expression should mean.</p>
+<h2 id="what-should-a-function-expression-mean">What should a function expression mean?</h2>
+<p>Consider:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>fun (x) -(x, 1)</span></span></code></pre>
+<p>What should happen when we evaluate this expression?</p>
+<p>We can’t evaluate the body yet because we don’t have a value for <code>x</code>.</p>
+<p>Instead, evaluating a function expression should produce a <strong>function value</strong> that remembers the parameter and body. The body will be evaluated later, when the function is called.</p>
+<p>So our rule is:</p>
+<blockquote><p>To evaluate <code>fun (parameter) body</code>, produce a function value containing the parameter and body. Do not evaluate the body.</p></blockquote>
+<h2 id="what-should-a-function-call-mean">What should a function call mean?</h2>
+<p>Consider:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>(decrement -(456, 123))</span></span></code></pre>
+<p>To evaluate this call, we first evaluate the function position, <code>decrement</code>, to get a function value. Then we evaluate the argument position, <code>-(456, 123)</code>, which produces <code>VNumber 333</code>.</p>
+<p>Suppose the function value has <code>x</code> as its parameter and <code>-(x, 1)</code> as its body. We extend the current environment with <code>x ↦ VNumber 333</code> and evaluate the body in that extended environment. The complete call therefore produces <code>VNumber 332</code>.</p>
+<p>More generally:</p>
+<blockquote><p>To evaluate <code>(function argument)</code>, evaluate the function position and argument position in the current environment. If the function position produces a function value, extend the current environment by binding its parameter to the argument value, then evaluate its body in that extended environment.</p></blockquote>
+<p>Notice that the argument is evaluated before the function body. FUN therefore uses <strong>call-by-value</strong>, matching Elm’s eager evaluation of function arguments.</p>
+<h2 id="extending-the-grammar">Extending the grammar</h2>
+<p>We can now extend the grammar with function expressions and call expressions:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>Expr ::= ...</span></span>
+<span class="line"><span>       | Fun</span></span>
+<span class="line"><span>       | Call</span></span>
+<span class="line"><span>Fun  ::= 'fun' '(' Id ')' Expr</span></span>
+<span class="line"><span>Call ::= '(' Expr Expr ')'</span></span></code></pre>
+<p>A <code>Fun</code> contains an identifier for its parameter followed by an expression for its body. A <code>Call</code> contains two expressions: one in the function position and one in the argument position.</p>
+<p>The only new reserved word is <code>fun</code>.</p>
+<h2 id="representing-functions-and-calls-in-the-ast">Representing functions and calls in the AST</h2>
+<p>The AST changes exactly as the grammar suggests:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">type Expr</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    =</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic"> -- ...</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    |</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Fun </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">Id</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Expr</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    |</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> Call </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">Expr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Expr</span></span></code></pre>
+<p><code>Fun</code> stores the parameter and body, while <code>Call</code> stores the expressions in the function and argument positions.</p>
+<p>That’s enough structure to represent both creating a function and calling one.</p>
+<h2 id="parsing-functions-and-calls">Parsing functions and calls</h2>
+<p>The parsers follow directly from the grammar:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">expr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Expr</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">expr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">    P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">oneOf</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD">        [</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic"> -- ...</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">        ,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> funExpr</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">        ,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> callExpr</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD">        ]</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">funExpr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Expr</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">funExpr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">    P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">succeed Fun</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> L</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">keyword </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">fun</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> L</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">symbol </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">(</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |=</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> id</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> L</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">symbol </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">)</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |=</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">lazy (</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">\_</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> expr)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">callExpr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Parser</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Expr</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">callExpr</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">    P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">succeed Call</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> L</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">symbol </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">(</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |=</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">lazy (</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">\_</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> expr)</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |=</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> P</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">lazy (</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">\_</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> expr)</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |.</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> L</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">symbol </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">)</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span></code></pre>
+<p>And <code>fun</code> joins the list of reserved words:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">keywords</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> =</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD">    [</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">else</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">    ,</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">fun</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">    ,</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">if</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">    ,</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">in</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">    ,</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">let</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">    ,</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">then</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD">    ]</span></span></code></pre>
+<p>If you’re joining the series for the first time, we’ve already explored the parser machinery behind this code in more depth. <a href="/posts/why-recursive-elm-parsers-need-parser-lazy/">Why Recursive Elm Parsers Need <code>Parser.lazy</code></a> explains why recursive parser values need to be delayed, while <a href="/posts/lexeme-parsers-in-elm/">Simplifying Whitespace with Lexeme Parsers in Elm</a> explains the lexeme-parser convention behind helpers such as <code>symbol</code> and <code>keyword</code>.</p>
+<h2 id="representing-functions-as-values">Representing functions as values</h2>
+<p>So far, our interpreter’s values have represented results such as numbers and Booleans. FUN adds a new kind of value:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">type Value</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    =</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic"> -- ...</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    |</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> VFun </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">Id</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Expr</span></span></code></pre>
+<p>This gives us an important distinction:</p>
+<ul>
+<li><code>Fun Id Expr</code> represents a function expression in the AST.</li>
+<li><code>VFun Id Expr</code> represents the value produced when that expression is evaluated.</li>
+</ul>
+<p>The evaluator rule follows directly from the semantics we established earlier:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Fun param body </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">    Ok </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">&#x3C;|</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> VFun param body</span></span></code></pre>
+<p>So evaluating:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>fun (x) -(x, 1)</span></span></code></pre>
+<p>produces:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>VFun "x" (Diff (Var "x") (Const 1))</span></span></code></pre>
+<p>Because functions are now part of the value domain, we also add a corresponding runtime type:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">type Type</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    =</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic"> -- ...</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">    |</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> TFun</span></span></code></pre>
+<p>We’ll use <code>TFun</code> when reporting an error if something that isn’t a function appears in the function position of a call.</p>
+<h2 id="calling-a-function">Calling a function</h2>
+<p><strong>Calling a function</strong>, also known as <strong>applying a function</strong> or <strong>function application</strong>, follows the rule we established earlier in the section “<a href="#what-should-a-function-call-mean">What should a function call mean?</a>”</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">Call f arg </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">    runExpr f env</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        |></span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> Result</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">andThen</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">            (</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">\</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">vF </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">                runExpr arg env</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">                    |></span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB"> Result</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">andThen</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">                        (</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">\</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">vArg </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">                            evalCall vF vArg env</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">                        )</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">            )</span></span></code></pre>
+<p>We evaluate the function position and the argument position in the current environment, then pass both resulting values to <code>evalCall</code>:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">evalCall</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> :</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Value</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Value</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Env</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Result</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> RuntimeError</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA"> Value</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">evalCall</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> vF vArg env </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">=</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">    case </span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">vF </span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic">of</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">        VFun param body </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">-></span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">            runExpr body (</span><span style="--shiki-light:#1976D2;--shiki-dark:#D6DEEB">Env</span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">.</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">extend param vArg env)</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">        _</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> -></span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">            Err </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">&#x3C;|</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">                TypeError</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">                    { expected </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">=</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD"> [</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> TFun </span><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD">]</span></span>
+<span class="line"><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">                    ,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> actual </span><span style="--shiki-light:#D32F2F;--shiki-dark:#C792EA">=</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD"> [</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> typeOf vF </span><span style="--shiki-light:#24292EFF;--shiki-dark:#D9F5DD">]</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">                    }</span></span></code></pre>
+<p>If the function position produced a <code>VFun</code>, we extend the environment by binding its parameter to the argument value and evaluate its body in that extended environment. If it produced any other kind of value, we report a type error.</p>
+<p>And that’s it. FUN now has functions. 🎉</p>
+<h2 id="passing-functions-as-arguments">Passing functions as arguments</h2>
+<p>Because functions are values, we can pass them as arguments to other functions.</p>
+<p>For example, <code>applytwice</code> takes a function <code>f</code> and applies it twice:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>let</span></span>
+<span class="line"><span>    applytwice =</span></span>
+<span class="line"><span>        fun (f) (f (f 5))</span></span>
+<span class="line"><span>in</span></span>
+<span class="line"><span>let</span></span>
+<span class="line"><span>    double =</span></span>
+<span class="line"><span>        fun (x) -(x, -(0, x))</span></span>
+<span class="line"><span>in</span></span>
+<span class="line"><span>(applytwice double)</span></span></code></pre>
+<p><code>double</code> turns <code>5</code> into <code>10</code>, then applying it again turns <code>10</code> into <code>20</code>, so the program evaluates to:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">VNumber </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">20</span></span></code></pre>
+<h2 id="returning-functions-as-results">Returning functions as results</h2>
+<p>Because functions are values, they can also be returned as results from other functions.</p>
+<p>For example, <code>select</code> returns one of two functions depending on its argument:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>let</span></span>
+<span class="line"><span>    select =</span></span>
+<span class="line"><span>        fun (n)</span></span>
+<span class="line"><span>            if zero?(n) then</span></span>
+<span class="line"><span>                fun (x) x</span></span>
+<span class="line"><span>            else</span></span>
+<span class="line"><span>                fun (x) -(x, 1)</span></span>
+<span class="line"><span>in</span></span>
+<span class="line"><span>((select 1) 8)</span></span></code></pre>
+<p><code>select 1</code> returns:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>fun (x) -(x, 1)</span></span></code></pre>
+<p>We then call that returned function with <code>8</code>, so the complete program evaluates to:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">VNumber </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">7</span></span></code></pre>
+<h2 id="first-class-and-higher-order-functions">First-class and higher-order functions</h2>
+<p>We can now see what it means for functions to be <strong>first-class values</strong> in FUN. We can create them as values, bind them to names, pass them as arguments, and return them as results.</p>
+<p>Functions that take other functions as arguments or return functions as results are called <strong>higher-order functions</strong>. <code>applytwice</code> is higher-order because it takes a function as an argument, while <code>select</code> is higher-order because it returns a function as its result.</p>
+<p>These capabilities emerge from a small change to the interpreter: functions are now part of its value domain.</p>
+<h2 id="currying-and-partial-application">Currying and partial application</h2>
+<p>When a Trinidadian thinks about <a href="https://www.youtube.com/watch?v=Ag85OTsaTWw">currying</a>, their mouth starts to water. Unfortunately, I’m talking about something else in this instance.</p>
+<p>FUN’s functions take one argument, but that doesn’t stop us from expressing functions that conceptually take more than one. We’ve just seen that a function can return another function, so we can use that ability to define <code>add</code> like this:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>let</span></span>
+<span class="line"><span>    add =</span></span>
+<span class="line"><span>        fun (a)</span></span>
+<span class="line"><span>            fun (b)</span></span>
+<span class="line"><span>                -(a, -(0, b))</span></span>
+<span class="line"><span>in</span></span>
+<span class="line"><span>((add 3) 5)</span></span></code></pre>
+<p><code>add</code> takes <code>a</code> and returns a function that takes <code>b</code>. That inner function then adds the two values. Representing a function of multiple arguments as a sequence of functions that each take one argument is called <strong>currying</strong>.</p>
+<p>Currying also lets us supply those arguments one at a time. <code>(add 3)</code> applies <code>add</code> to <code>3</code> and produces a function waiting for <code>b</code>. Supplying some, but not all, of a function’s arguments in this way is called <strong>partial application</strong>.</p>
+<p>So <code>((add 3) 5)</code> first partially applies <code>add</code> to <code>3</code>, then applies the resulting function to <code>5</code>. We would expect the program to produce <code>VNumber 8</code>.</p>
+<p>It doesn’t.</p>
+<p>Instead, FUN reports:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">IdentifierNotFound </span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">a</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span></span></code></pre>
+<p>That’s no FUN.</p>
+<h2 id="hold-up-wait-a-minute-something-aint-right">Hold up, wait a minute, something ain’t right</h2>
+<p><a href="https://www.youtube.com/watch?v=pkKNasQXVV0"><img alt="Hold up, wait a minute, something ain&#39;t right" loading="lazy" decoding="async" width="320" height="180" src="/_astro/hold-up-wait-a-minute.Zd1zasaj_Z2vg5qx.webp"></a></p>
+<p>When we evaluate <code>(add 3)</code>, <code>a</code> is bound to <code>VNumber 3</code> while the body of <code>add</code> is evaluated. But that body produces a function value containing only its parameter and body:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>VFun "b" (Diff (Var "a") (Diff (Const 0) (Var "b")))</span></span></code></pre>
+<p>The environment containing the binding for <code>a</code> isn’t part of that value. By the time we apply the returned function to <code>5</code>, <code>b</code> is available in the current environment, but <code>a</code> isn’t. Hence <code>IdentifierNotFound "a"</code>.</p>
+<p>We can make the behaviour even clearer by putting another binding for <code>a</code> around the call:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>let</span></span>
+<span class="line"><span>    a = 11</span></span>
+<span class="line"><span>in</span></span>
+<span class="line"><span>((add 3) 5)</span></span></code></pre>
+<p>Now FUN produces <code>VNumber 16</code>. The returned function doesn’t use the <code>a = 3</code> that existed when it was created. It finds the <code>a = 11</code> that’s available when its body is evaluated.</p>
+<p>This behaviour has a name.</p>
+<h2 id="what-is-dynamic-scope">What is dynamic scope?</h2>
+<p>In the function returned by <code>(add 3)</code>, <code>b</code> is bound by the function’s parameter, but <code>a</code> is not. <code>a</code> is a <strong>free variable</strong>.</p>
+<p>FUN resolves free variables using the environment in effect when the function is called. This is called <strong>dynamic scope</strong>.</p>
+<p>That’s why the first program couldn’t find <code>a</code>, while the second found <code>a = 11</code>. The meaning of the free variable depended on the environment surrounding the call.</p>
+<p>Our implementation gets this behaviour because a function value stores only its parameter and body. When the function is called, its parameter is added to the current environment and its body is evaluated there.</p>
+<p>We followed what seemed like the natural way to evaluate a function call, and dynamically scoped functions emerged from that choice.</p>
+<h2 id="how-did-lisp-end-up-here-too">How did Lisp end up here too?</h2>
+<p>There’s a wonderfully familiar moment in John McCarthy’s <a href="http://jmc.stanford.edu/articles/lisp.html">History of Lisp</a>. He begins his account of the problem with: “In all innocence, James R. Slagle” wrote a LISP function and complained when it didn’t work correctly.</p>
+<p>Slagle’s function, <code>testr</code>, recursively searched an expression. It took a function <code>u</code> that should be called if the search failed. During the search, <code>testr</code> recursively called itself and passed along a newly created function as the next <code>u</code>. That function referred to <code>x</code> from the call in which it was created. Slagle expected that reference to keep meaning the outer <code>x</code>. Instead, when the function was eventually called, LISP found the <code>x</code> belonging to an inner recursive call.</p>
+<p>Slagle complained, but McCarthy didn’t initially see anything profound going on. “I regarded this difficulty as just a bug,” he recalled, and he was confident Steve Russell would fix it. Russell eventually did, but the problem turned out to be more fundamental than an ordinary implementation mistake; McCarthy notes that similar difficulties later appeared in Algol 60 as well.</p>
+<p>That’s remarkably close to the path we just took with FUN. We followed what seemed like the natural way to evaluate a function call, tried a perfectly reasonable higher-order program, and discovered that a free variable was finding its value somewhere we didn’t expect.</p>
+<h2 id="can-we-make-add-work-the-way-we-expected">Can we make <code>add</code> work the way we expected?</h2>
+<p><code>add</code> surprised us, but we still want it to work the way we expected.</p>
+<p>Maybe you can figure out how to change FUN so that:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="txt"><code><span class="line"><span>((add 3) 5)</span></span></code></pre>
+<p>produces:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="elm"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">VNumber </span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C">8</span></span></code></pre>
+<p>In the next article, we’ll pick up where we left off and work toward a solution.</p></article><hr class="my-8 border-dashed"><aside aria-label="Follow Tiny Interpreters" class="w-full my-12"><script data-astro-rerun async data-uid="a375893292" src="https://tinyinterpreters.kit.com/a375893292/index.js"></script></aside><hr class="my-8 border-dashed"><div id="btt-btn-container" class="fixed inset-e-4 bottom-8 z-50 md:sticky md:inset-e-auto md:float-end md:me-1 translate-y-14 opacity-0 transition duration-500"><button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-14 rounded-full shadow-xl md:h-8 md:w-fit md:rounded-md md:shadow-none md:focus-visible:rounded-none md:bg-background/35 md:bg-clip-padding md:backdrop-blur-lg"><span id="progress-indicator" class="absolute inset-0 -z-10 block size-14 scale-110 rounded-full bg-transparent md:hidden md:h-8 md:rounded-md"></span><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 md:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg><span class="group-hover:text-accent sr-only text-sm md:not-sr-only"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg>Back to top</span></button></div><script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop / scrollTotal > 0.3;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script><ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8"><li><a data-astro-transition-scope="astro-bztu2lml-1" href="/tags/first-class-functions/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-mt-0.5 focus-visible:text-accent focus-visible:border-none text-sm"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg>first-class functions</a></li><li><a data-astro-transition-scope="astro-bztu2lml-2" href="/tags/currying/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-mt-0.5 focus-visible:text-accent focus-visible:border-none text-sm"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg>currying</a></li><li><a data-astro-transition-scope="astro-bztu2lml-3" href="/tags/elm/" class="flex items-center gap-0.5 border-foreground border-b-2 border-dashed hover:border-accent hover:text-accent hover:-mt-0.5 focus-visible:text-accent focus-visible:border-none text-sm"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg>elm</a></li></ul><div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start"><span class="italic">Share this post:</span><div class="text-center"><a href="https://wa.me/?text=https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/" title="Share this post on Whatsapp" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9z" /><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0za5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" /></svg><span class="sr-only">Share this post on Whatsapp</span></a><a href="https://www.facebook.com/sharer.php?u=https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/" title="Share this post on Facebook" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M7 10v4h3v7h4v-7h3l1-4h-4V8a1 1 0 0 1 1-1h3V3h-3a5 5 0 0 0-5 5v2z" /></svg><span class="sr-only">Share this post on Facebook</span></a><a href="https://x.com/intent/post?url=https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/" title="Share this post on X" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg><span class="sr-only">Share this post on X</span></a><a href="https://t.me/share/url?url=https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/" title="Share this post on Telegram" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 10-4 4 6 6 4-16-18 7 4 2 2 6 3-4" /></svg><span class="sr-only">Share this post on Telegram</span></a><a href="https://pinterest.com/pin/create/button/?url=https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/" title="Share this post on Pinterest" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m8 20 4-9M10.7 14c.437 1.263 1.43 2 2.55 2 2.071 0 3.75-1.554 3.75-4a5 5 0 1 0-9.7 1.7" /><path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0" /></svg><span class="sr-only">Share this post on Pinterest</span></a><a href="mailto:?subject=See%20this%20post&amp;body=https://blog.tinyinterpreters.dev/posts/fun-first-class-functions/" title="Share this post via email" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg><span class="sr-only">Share this post via email</span></a></div></div><div class="mt-8" data-giscus-container></div><script type="module">function e(){let e=document.querySelector(`[data-giscus-container]`);if(!(e instanceof HTMLDivElement))return;e.replaceChildren();let t=document.createElement(`script`);t.src=`https://giscus.app/client.js`,t.async=!0,t.crossOrigin=`anonymous`,Object.assign(t.dataset,{repo:`tinyinterpreters/blog`,repoId:`R_kgDOTJXewg`,category:`Announcements`,categoryId:`DIC_kwDOTJXews4DCVG3`,mapping:`pathname`,strict:`1`,reactionsEnabled:`1`,emitMetadata:`0`,inputPosition:`top`,theme:`preferred_color_scheme`,lang:`en`,loading:`lazy`}),e.appendChild(t)}document.addEventListener(`astro:page-load`,e);</script><hr class="my-8 border-dashed"><div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"><a href="/posts/letdep/" class="flex w-full gap-1 hover:opacity-75"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg><div><span>Previous Post</span><div class="text-accent/85 text-sm">LETDEP: Dependency-Ordered Binding Semantics for let Expressions</div></div></a></div></main><footer class="app-layout mt-auto"><div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"><div class="flex flex-wrap items-center gap-1"><a href="https://github.com/tinyinterpreters" title="Tiny Interpreters on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg><span class="sr-only">Tiny Interpreters on Github</span></a><a href="mailto:dwayne@tinyinterpreters.dev" title="Send an email to Tiny Interpreters" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg><span class="sr-only">Send an email to Tiny Interpreters</span></a></div><div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row"><span>Copyright &#169; 2026</span><span class="hidden sm:inline">&nbsp;|&nbsp;</span><span>All rights reserved.</span></div></div></footer><script type="module">var e=`theme`,t=`light`,n=`dark`;function r(){return localStorage.getItem(e)||(window.matchMedia(`(prefers-color-scheme: dark)`).matches?n:t)}var i=window.__theme?.value??r();function a(){localStorage.setItem(e,i),o()}function o(){let e=document.firstElementChild;e?.setAttribute(`data-theme`,i),e?.classList.toggle(`dark`,i===n),document.querySelector(`#theme-btn`)?.setAttribute(`aria-label`,i);let t=window.getComputedStyle(document.body).backgroundColor;document.querySelector(`meta[name='theme-color']`)?.setAttribute(`content`,t)}function s(){o(),document.querySelector(`#theme-btn`)?.addEventListener(`click`,()=>{i=i===t?n:t,a()})}s(),document.addEventListener(`astro:after-swap`,s),document.addEventListener(`astro:before-swap`,e=>{let t=document.querySelector(`meta[name='theme-color']`)?.getAttribute(`content`);t&&e.newDocument.querySelector(`meta[name='theme-color']`)?.setAttribute(`content`,t)}),window.matchMedia(`(prefers-color-scheme: dark)`).addEventListener(`change`,({matches:e})=>{i=e?n:t,a()});</script></body></html><script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  function addHeadingLinks() {
+    const headings = Array.from(
+      document.querySelectorAll("h2, h3, h4, h5, h6")
+    );
+    for (const heading of headings) {
+      heading.classList.add("group");
+      const link = document.createElement("a");
+      link.className =
+        "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
+      link.href = "#" + heading.id;
+
+      const span = document.createElement("span");
+      span.ariaHidden = "true";
+      span.innerText = "#";
+      link.appendChild(span);
+      heading.appendChild(link);
+    }
+  }
+  addHeadingLinks();
+
+  function attachCopyButtons() {
+    const copyButtonLabel = "Copy";
+    const codeBlocks = Array.from(document.querySelectorAll("pre:not(.mermaid)"));
+
+    for (const codeBlock of codeBlocks) {
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "relative";
+
+      const computedStyle = getComputedStyle(codeBlock);
+      const hasFileNameOffset =
+        computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
+
+      const topClass = hasFileNameOffset
+        ? "top-(--file-name-offset)"
+        : "-top-3";
+
+      const copyButton = document.createElement("button");
+      copyButton.className = `copy-code absolute end-3 ${topClass} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
+      copyButton.innerHTML = copyButtonLabel;
+      codeBlock.setAttribute("tabindex", "0");
+      codeBlock.appendChild(copyButton);
+
+      codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(codeBlock);
+
+      copyButton.addEventListener("click", async () => {
+        await copyCode(codeBlock, copyButton);
+      });
+    }
+
+    async function copyCode(block, button) {
+      const code = block.querySelector("code");
+      const text = code?.innerText;
+
+      await navigator.clipboard.writeText(text ?? "");
+
+      button.innerText = "Copied";
+
+      setTimeout(() => {
+        button.innerText = copyButtonLabel;
+      }, 700);
+    }
+  }
+  attachCopyButtons();
+
+  /** Accessible image lightbox for article images. */
+  function initLightbox() {
+    const article = document.getElementById("article");
+    if (!article) return;
+
+    const prefersReducedMotion = () =>
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let overlay = null;
+    let lastFocused = null;
+
+    // Defer attribute mutations so they don't push the LCP timestamp.
+    // Event listeners below use delegation and don't need the attributes to exist yet.
+    requestAnimationFrame(() => {
+      const images = Array.from(article.querySelectorAll("img"));
+      for (const image of images) {
+        if (image.closest("a")) continue;
+        image.setAttribute("role", "button");
+        image.setAttribute("tabindex", "0");
+        image.setAttribute("aria-haspopup", "dialog");
+        image.setAttribute(
+          "aria-label",
+          image.alt ? `Zoom image: ${image.alt}` : "Zoom image"
+        );
+      }
+    });
+
+    function open(src, alt, trigger) {
+      if (overlay) return;
+      lastFocused = trigger ?? document.activeElement;
+
+      overlay = document.createElement("div");
+      overlay.setAttribute("role", "dialog");
+      overlay.setAttribute("aria-modal", "true");
+      overlay.setAttribute(
+        "aria-label",
+        alt ? `Image preview: ${alt}` : "Image preview"
+      );
+      overlay.className =
+        "fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/70 backdrop-blur-sm opacity-0 transition-opacity duration-200 motion-reduce:transition-none";
+
+      const closeButton = document.createElement("button");
+      closeButton.type = "button";
+      closeButton.setAttribute("aria-label", "Close image preview");
+      closeButton.className =
+        "absolute end-4 top-4 rounded p-2 text-3xl leading-none text-white";
+      closeButton.innerHTML = "&#10005;";
+      closeButton.addEventListener("click", close);
+
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = "";
+      image.className =
+        "max-h-[90dvh] max-w-[90dvw] cursor-default object-contain";
+
+      overlay.append(closeButton, image);
+      overlay.addEventListener("click", e => {
+        if (e.target === overlay && currentScale <= 1) close();
+      });
+
+      let currentScale = 1;
+      let translateX = 0;
+      let translateY = 0;
+      let initialDist = 0;
+      let initialScale = 1;
+      let panStartX = 0;
+      let panStartY = 0;
+      let panStartTranslateX = 0;
+      let panStartTranslateY = 0;
+      let lastTapTime = 0;
+
+      function applyTransform() {
+        image.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
+      }
+
+      function resetTransform() {
+        currentScale = 1;
+        translateX = 0;
+        translateY = 0;
+        image.style.transform = "";
+      }
+
+      overlay.addEventListener(
+        "touchstart",
+        e => {
+          const t = e.touches;
+          if (t.length === 2) {
+            initialDist = Math.hypot(
+              t[1].clientX - t[0].clientX,
+              t[1].clientY - t[0].clientY
+            );
+            initialScale = currentScale;
+          } else if (t.length === 1) {
+            const now = Date.now();
+            if (now - lastTapTime < 300) {
+              e.preventDefault();
+              if (currentScale > 1) {
+                resetTransform();
+              } else {
+                currentScale = 2;
+                translateX = 0;
+                translateY = 0;
+                applyTransform();
+              }
+              lastTapTime = 0;
+              panStartX = t[0].clientX;
+              panStartY = t[0].clientY;
+              panStartTranslateX = translateX;
+              panStartTranslateY = translateY;
+            } else {
+              lastTapTime = now;
+              if (currentScale > 1) {
+                panStartX = t[0].clientX;
+                panStartY = t[0].clientY;
+                panStartTranslateX = translateX;
+                panStartTranslateY = translateY;
+              }
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      overlay.addEventListener(
+        "touchmove",
+        e => {
+          const t = e.touches;
+          if (t.length === 2) {
+            e.preventDefault();
+            const dist = Math.hypot(
+              t[1].clientX - t[0].clientX,
+              t[1].clientY - t[0].clientY
+            );
+            currentScale = Math.min(
+              4,
+              Math.max(1, initialScale * (dist / initialDist))
+            );
+            applyTransform();
+          } else if (t.length === 1) {
+            if (currentScale > 1) {
+              e.preventDefault();
+              translateX =
+                panStartTranslateX + (t[0].clientX - panStartX) / currentScale;
+              translateY =
+                panStartTranslateY + (t[0].clientY - panStartY) / currentScale;
+              const maxX = Math.max(
+                0,
+                (image.clientWidth - overlay.clientWidth / currentScale) / 2
+              );
+              const maxY = Math.max(
+                0,
+                (image.clientHeight - overlay.clientHeight / currentScale) / 2
+              );
+              translateX = Math.min(maxX, Math.max(-maxX, translateX));
+              translateY = Math.min(maxY, Math.max(-maxY, translateY));
+              applyTransform();
+            } else {
+              e.preventDefault();
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      overlay.addEventListener("touchend", e => {
+        if (e.touches.length === 0 && currentScale <= 1.05) {
+          resetTransform();
+        }
+      });
+
+      overlay.addEventListener("touchcancel", e => {
+        if (e.touches.length === 0 && currentScale <= 1.05) {
+          resetTransform();
+        }
+      });
+
+      document.body.appendChild(overlay);
+      document.body.style.overflow = "hidden";
+      document.addEventListener("keydown", onKeyDown);
+      window.__closeLightbox = close;
+
+      requestAnimationFrame(() => overlay?.classList.add("opacity-100"));
+      closeButton.focus();
+    }
+
+    function close() {
+      if (!overlay) return;
+      const el = overlay;
+      overlay = null;
+      window.__closeLightbox = null;
+
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+      lastFocused?.focus();
+      lastFocused = null;
+
+      if (prefersReducedMotion()) {
+        el.remove();
+        return;
+      }
+      const remove = () => el.remove();
+      el.addEventListener("transitionend", remove, { once: true });
+      setTimeout(remove, 250); // fallback in case transitionend never fires
+      el.classList.remove("opacity-100");
+    }
+
+    function onKeyDown(e) {
+      if (e.key === "Escape") {
+        close();
+      } else if (e.key === "Tab") {
+        trapFocus(e);
+      }
+    }
+
+    // Keep keyboard focus inside the open dialog.
+    function trapFocus(e) {
+      if (!overlay) return;
+      const focusables = overlay.querySelectorAll(
+        'a[href], button, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    function triggerFromEvent(e) {
+      const image = e.target.closest("img");
+      if (!image || !article.contains(image) || image.closest("a")) return null;
+      return image;
+    }
+
+    function activate(image) {
+      open(image.currentSrc || image.src, image.alt, image);
+    }
+
+    article.addEventListener("click", e => {
+      const image = triggerFromEvent(e);
+      if (!image) return;
+      e.preventDefault();
+      activate(image);
+    });
+
+    article.addEventListener("keydown", e => {
+      if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+      const image = triggerFromEvent(e);
+      if (!image) return;
+      e.preventDefault();
+      activate(image);
+    });
+  }
+  initLightbox();
+
+  if (!window.__lightboxSwapBound) {
+    window.__lightboxSwapBound = true;
+    document.addEventListener("astro:before-swap", () =>
+      window.__closeLightbox?.()
+    );
+  }
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>
