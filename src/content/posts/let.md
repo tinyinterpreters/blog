@@ -456,9 +456,9 @@ You can find the [complete source code for LET, including the tests, on GitHub](
 
 Our programs can now introduce local bindings and use them to name intermediate results.
 
-Next, in PROC, we'll add procedures. That gives us several language-design questions to consider:
+Next, in [FUN: First-Class Functions, Currying, and a Surprise](/posts/fun-first-class-functions), we'll add functions. That gives us several language-design questions to consider:
 
-- Should we allow variables to be bound to procedures?
-- Should we allow procedures to be passed as arguments to other procedures?
-- Should we allow procedures to be returned from other procedures?
-- When a procedure's body refers to a name defined outside the procedure, where should we look up its value?
+- Should we allow variables to be bound to functions?
+- Should we allow functions to be passed as arguments to other functions?
+- Should we allow functions to be returned from other functions?
+- When a function's body refers to a name defined outside the function, where should we look up its value?
