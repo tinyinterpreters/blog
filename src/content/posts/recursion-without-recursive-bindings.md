@@ -343,7 +343,7 @@ in
 
 ### `fib`
 
-#### The standard version in Elm
+#### The recursive version in Elm
 
 ```elm
 fib : Int -> Int
