@@ -189,7 +189,7 @@ His title gets to the heart of it: once a function contains free variables, the 
 
 ## Scheme combined lexical scope with first-class procedures
 
-A few years later, Scheme made a clear choice about how procedures and their environments should work.
+A few years later, Scheme made a clear choice about how procedures and their environments should work. **Procedure** is Scheme's word for a function: it describes how to compute a result, and may have side effects along the way, so it isn't a function in the mathematical sense.
 
 In their 1975 report, [SCHEME: An Interpreter for Extended Lambda Calculus](https://research.scheme.org/lambda-papers/lambda-papers-scheme-report.html), Gerald Jay Sussman and Guy Steele described a closure as a lambda expression together with the environment to use when it is applied. Free variables refer to the environment saved with the closure, not the environment where the closure is later applied.
 
