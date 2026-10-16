@@ -224,7 +224,7 @@
 <p>He framed the problem as determining what values to assign to free variables in functions and compared different ways LISP implementations dealt with their environments.</p>
 <p>His title gets to the heart of it: once a function contains free variables, the language has to determine which environment supplies their values.</p>
 <h2 id="scheme-combined-lexical-scope-with-first-class-procedures">Scheme combined lexical scope with first-class procedures</h2>
-<p>A few years later, Scheme made a clear choice about how procedures and their environments should work.</p>
+<p>A few years later, Scheme made a clear choice about how procedures and their environments should work. <strong>Procedure</strong> is Scheme’s word for a function: it describes how to compute a result, and may have side effects along the way, so it isn’t a function in the mathematical sense.</p>
 <p>In their 1975 report, <a href="https://research.scheme.org/lambda-papers/lambda-papers-scheme-report.html">SCHEME: An Interpreter for Extended Lambda Calculus</a>, Gerald Jay Sussman and Guy Steele described a closure as a lambda expression together with the environment to use when it is applied. Free variables refer to the environment saved with the closure, not the environment where the closure is later applied.</p>
 <p>The <a href="https://research.scheme.org/lambda-papers/lambda-papers-revised-report.html">1978 Revised Report on Scheme</a> made the consequence explicit: variables in Scheme were normally lexically scoped, while procedures were treated as first-class values.</p>
 <h2 id="a-challenge-for-next-time">A challenge for next time</h2>
