@@ -1,0 +1,33 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+      timezone: America/Port_of_Spain
+
+jobs:
+  deploy:
+    permissions:
+      contents: write
+
+    concurrency:
+      group: deploy
+      cancel-in-progress: false
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - run: nix run .#deploy
