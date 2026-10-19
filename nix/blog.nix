@@ -1,15 +1,16 @@
 { fetchPnpmDeps
 , lib
 , nodejs-slim_24
-, pnpm
+, pnpm_12
 , pnpmConfigHook
-, stdenv
+, stdenvNoCC
 }:
 
 let
   fs = lib.fileset;
+  pnpm = pnpm_12;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "blog";
   version = "1.0.0";
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs-slim_24
     pnpm
-    pnpmConfigHook
+    (pnpmConfigHook.override { inherit pnpm; })
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -40,12 +41,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-PBOiGCDUFPMA34YM893wZSFtXXFqFTK+SOJtCLqy66o=";
   };
 
+  env.ASTRO_TELEMETRY_DISABLED = "1";
+
   buildPhase = ''
     runHook preBuild
-
     pnpm build
-    cp -R dist/ "$out/"
-
     runHook postBuild
   '';
+
+  installPhase = ''
+    runHook preInstall
+    cp -r dist "$out"
+    runHook postInstall
+  '';
+
+  dontFixup = true;
+  allowedReferences = [];
 })
