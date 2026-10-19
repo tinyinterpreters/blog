@@ -14,6 +14,10 @@ build:
 preview:
   pnpm preview
 
+# Check for a stale hash
+check-pnpmDeps-hash:
+  nix build .#blog.pnpmDeps --rebuild
+
 # Remove untracked generated artifacts
 clean:
   rm -rf "$PROJECT_ROOT/"{.astro,dist,node_modules,public/pagefind,result}
